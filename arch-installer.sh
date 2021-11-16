@@ -13,7 +13,7 @@ lsblk
 # format efi partition.
 echo "Enter linux EFI partition: "
 read linuxefipartition
-mkfs.fat -F32 $linuxefipartition
+mkfs.fat -F 32 $linuxefipartition
 
 # format root partition.
 echo "Enter root partition: "
@@ -36,11 +36,12 @@ basestrap /mnt base base-devel runit elogind-runit linux-lts linux-firmware neov
 echo "-- Generate fstab."
 fstabgen -U /mnt >> /mnt/etc/fstab
 
-#new-system-config
 
 # move installer to new system
 sed '1,/^#new-system-config$/d' arch-installer.sh > /mnt/installer.sh
 chmod +x /mnt/installer.sh
+
+#new-system-config
 
 # go to system
 echo "-- Move to new system."
