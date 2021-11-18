@@ -113,6 +113,10 @@ grub-mkconfig -o /boot/grub/grub.cfg
 echo "${green}-- Set root user password.${reset}"
 passwd
 
+# setting up sudoers file.
+echo "${green}-- Setting up sudoers file.${reset}"
+echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
 # install system packages
 echo "${green}-- Install system packages.${reset}"
 pacman -S --noconfirm networkmanager networkmanager-runit
@@ -120,12 +124,6 @@ pacman -S --noconfirm networkmanager networkmanager-runit
 # starting networkmanager.
 echo "${green}-- Starting network manager${reset}"
 ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default/
-
-#  setting up sudoers file.
-echo "${green}-- Setting up sudoers file.${reset}"
-echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-# ------------------------------------------------------------------------------------------------------------------
 
 # creating new user.
 echo "${green}-- Creating new user.${reset}"
