@@ -42,17 +42,17 @@ basestrap /mnt base base-devel runit elogind-runit linux-lts linux-firmware neov
 echo "${green}-- Generate fstab.${reset}"
 fstabgen -U /mnt >> /mnt/etc/fstab
 
-
 # move installer to new system
 sed '1,/^#new-system-config$/d' arch-installer.sh > /mnt/installer.sh
 chmod +x /mnt/installer.sh
 
-#new-system-config
-
 # go to system
 echo "${green}-- Move to new system.${reset}"
-artix-chroot /mnt ./installer.sh
+artix-chroot /mnt
+./installer.sh
 exit
+
+#new-system-config
 
 # set local time zone
 echo "${green}-- Set time zone.${reset}"
@@ -131,6 +131,6 @@ echo "${green}-- Creating new user.${reset}"
 echo "${yellow}Enter Username: ${reset}"
 read username
 echo "${yellow}Enter Password: ${reset}"
-read password
-passwd $password
-useradd -m -G wheel -s /bin/zsh $username
+passwd
+useradd -m -G wheel -s /bin/bash $username
+exit
