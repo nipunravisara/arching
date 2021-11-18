@@ -34,7 +34,7 @@ mount $linuxefipartition /mnt/boot
 
 # install linux system and essentials.
 echo "${green}-- Install linux system and essentials.${reset}"
-basestrap /mnt base base-devel runit elogind-runit linux-lts linux-firmware neovim curl git dosfstools grub os-prober ntfs-3g efibootmgr
+basestrap /mnt base base-devel runit elogind-runit linux-lts linux-firmware neovim curl git dosfstools grub os-prober ntfs-3g efibootmgr artix-archlinux-support
 
 # generate fstab
 echo "${green}-- Generate fstab.${reset}"
@@ -142,6 +142,8 @@ su -c $ricer_path -s /bin/sh $username
 # enable arch repos
 echo "${green}Enable arch repos.${reset}"
 echo -e "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n\n[community]\nInclude = /etc/pacman.d/mirrorlist-arch\n" >> /etc/pacman.conf
+pacman -Sy
+pacman-key --populate archlinux
 
 # install packages
 echo "${green}Install package${reset}"
