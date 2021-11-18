@@ -1,7 +1,7 @@
 # colors
 red=`tput setaf 1`
 green=`tput setaf 2`
-yellow=`tput setaf 2`
+yellow=`tput setaf 3`
 reset=`tput sgr0`
 
 echo "${green}Starting installation...${reset}"
@@ -31,10 +31,6 @@ echo "${green}-- Mounting partitons.${reset}"
 mount $rootpartition /mnt
 mkdir /mnt/boot
 mount $linuxefipartition /mnt/boot
-df
-sleep 2
-
-# -------------------------------------------------------------------------------------------------------------
 
 # install linux system and essentials.
 echo "${green}-- Install linux system and essentials.${reset}"
@@ -51,14 +47,15 @@ chmod +x /mnt/installer.sh
 # go to system
 echo "${green}-- Move to new system.${reset}"
 artix-chroot /mnt 
-./installer.sh
+exec ./installer.sh
+exit
 
 #new-system-config
 
 # colors
 red=`tput setaf 1`
 green=`tput setaf 2`
-yellow=`tput setaf 2`
+yellow=`tput setaf 3`
 reset=`tput sgr0`
 
 # set local time zone
@@ -136,4 +133,12 @@ echo "${yellow}Enter Username and password: ${reset}"
 read username
 passwd
 useradd -m -G wheel -s /bin/bash $username
-exit
+
+# finish installation
+echo "Installation finished"
+read -p "Do you wish to reboot? [y/n]" answer
+if [[ $answer = y ]] ; then
+     exit
+     umount -R /mnt
+     reboot
+fi
