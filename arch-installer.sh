@@ -19,7 +19,7 @@ lsblk
 # format efi partition.
 echo "${yellow}Enter linux EFI partition: ${reset}"
 read linuxefipartition
-mkfs.fat -F 32 $linuxefipartition
+mkfs.fat -F32 $linuxefipartition
 
 # format root partition.
 echo "${yellow}Enter root partition: ${reset}"
@@ -28,9 +28,11 @@ mkfs.ext4 $rootpartition
 
 # mounting partitons
 echo "${green}-- Mounting partitons.${reset}"
-mkdir /mnt/boot
 mount $rootpartition /mnt
+mkdir /mnt/boot
 mount $linuxefipartition /mnt/boot
+df
+sleep 2
 
 # -------------------------------------------------------------------------------------------------------------
 
