@@ -48,11 +48,16 @@ chmod +x /mnt/installer.sh
 
 # go to system
 echo "${green}-- Move to new system.${reset}"
-artix-chroot /mnt
+artix-chroot /mnt 
 ./installer.sh
-exit
 
 #new-system-config
+
+# colors
+red=`tput setaf 1`
+green=`tput setaf 2`
+yellow=`tput setaf 2`
+reset=`tput sgr0`
 
 # set local time zone
 echo "${green}-- Set time zone.${reset}"
@@ -128,9 +133,8 @@ echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # creating new user.
 echo "${green}-- Creating new user.${reset}"
-echo "${yellow}Enter Username: ${reset}"
+echo "${yellow}Enter Username and password: ${reset}"
 read username
-echo "${yellow}Enter Password: ${reset}"
 passwd
 useradd -m -G wheel -s /bin/bash $username
 exit
