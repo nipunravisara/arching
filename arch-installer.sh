@@ -141,8 +141,8 @@ su -c $ricer_path -s /bin/sh $username
 
 # enable arch repos
 echo "${green}Enable arch repos.${reset}"
-echo -e "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n\n[community]\nInclude = /etc/pacman.d/mirrorlist-arch\n" >> /etc/pacman.conf
 pacman -Sy
+echo -e "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n\n[community]\nInclude = /etc/pacman.d/mirrorlist-arch\n" >> /etc/pacman.conf
 pacman-key --populate archlinux
 
 # install packages
