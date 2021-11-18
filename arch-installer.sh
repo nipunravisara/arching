@@ -34,7 +34,7 @@ mount $linuxefipartition /mnt/boot
 
 # install linux system and essentials.
 echo "${green}-- Install linux system and essentials.${reset}"
-basestrap /mnt base base-devel runit elogind-runit linux-lts linux-firmware neovim curl git dosfstools
+basestrap /mnt base base-devel runit elogind-runit linux-lts linux-firmware neovim curl git dosfstools grub os-prober ntfs-3g efibootmgr
 
 # generate fstab
 echo "${green}-- Generate fstab.${reset}"
@@ -130,13 +130,39 @@ echo "${green}-- Creating new user.${reset}"
 echo "${yellow}Enter Username and password: ${reset}"
 read username
 passwd
-useradd -m -G wheel -s /bin/bash $username
+useradd -m -G wheel -s /bin/sh $username
+
+# set ricing spesific installer
+ricer_path=/home/$username/ricing.sh
+sed '1,/^#system-ricing-config$/d' installer.sh > $ricer_path
+chown $username:$username $ricer_path
+chmod +x $ricer_path
+su -c $ricer_path -s /bin/sh $username
+
+# enable arch repos
+echo "${green}Enable arch repos.${reset}"
+echo -e "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n\n[community]\nInclude = /etc/pacman.d/mirrorlist-arch\n" >> /etc/pacman.conf
+
+# install packages
+echo "${green}Install package${reset}"
+pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop \
+	sxiv mpv zathura zathura-pdf-mupdf xclip zip unzip unrar p7zip zsh rsync firefox libnotify dunst \
+	bspwm sxhkd pamixer 
 
 # finish installation
-echo "Installation finished"
-read -p "Do you wish to reboot? [y/n]" answer
-if [[ $answer = y ]] ; then
-     exit
-     umount -R /mnt
-     reboot
-fi
+echo "Installation finished."
+
+#system-ricing-config
+
+# create folders
+cd $HOME
+echo "${green}Create folders.${reset}"
+mkdir -p ~/documents ~/development ~/videos
+
+# clone dotfiles
+echo "${green}Clone dotfiles.${reset}"
+git clone --separate-git-dir=$HOME/.dotfiles https://github.com/anandpiyer/.dotfiles.git tmpdotfiles
+rsync --recursive --verbose --exclude '.git' tmpdotfiles/ $HOME/
+rm -r tmpdotfiles
+
+
