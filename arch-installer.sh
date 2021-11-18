@@ -38,7 +38,7 @@ sleep 2
 
 # install linux system and essentials.
 echo "${green}-- Install linux system and essentials.${reset}"
-basestrap /mnt base base-devel runit elogind-runit linux-lts linux-firmware neovim curl git dosfstools
+basestrap /mnt base base-devel runit elogind-runit linux-lts linux-firmware neovim curl git nvim dosfstools
 
 # generate fstab
 echo "${green}-- Generate fstab.${reset}"
@@ -87,15 +87,16 @@ echo -e "\n127.0.0.1    localhost\n::1          localhost\n127.0.0.1    desktop.
 
 # install bootloader and relevent packages
 echo "${green}-- Install bootloader and relevent packages.${reset}"
-pacman --noconfirm -S grub os-prober ntfs-3g
+pacman --noconfirm -S grub os-prober ntfs-3g efibootmgr
 
 # choosing dual boot or single boot
 read -p "Do you wish to dualboot? [y/n]" answer
 if [[ $answer = y ]] ; then
+     
      # mounting windows efi
      echo "${green}-- Mounting windows EFI.${reset}"
      mkdir /boot/efi
-     lsblk
+
      echo "${yellow}Enter windows EFI partition: ${reset}"
      read winefipartition
      mount $winefipartition /boot/efi
@@ -106,7 +107,7 @@ echo -e "\n# Enable os-prober\nGRUB_DISABLE_OS_PROBER=false" >> /etc/default/gru
 os-prober
 
 # install grub on system
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
 
 # generate grub conf
 grub-mkconfig -o /boot/grub/grub.cfg
@@ -117,11 +118,7 @@ passwd
 
 # install system packages
 echo "${green}-- Install system packages.${reset}"
-pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop xcompmgr \
-     mpv zathura zathura-pdf-mupdf firefox \
-     xclip zip unzip unrar p7zip xdotool \
-     papirus-icon-theme sxhkd zsh arc-gtk-theme \
-     networkmanager networkmanager-runit
+pacman -S --noconfirm networkmanager networkmanager-runit
 
 # starting networkmanager.
 echo "${green}-- Starting network manager${reset}"
