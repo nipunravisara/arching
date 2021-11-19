@@ -132,13 +132,6 @@ read username
 passwd
 useradd -m -G wheel -s /bin/sh $username
 
-# set ricing spesific installer
-ricer_path=/home/$username/ricing.sh
-sed '1,/^#system-ricing-config$/d' installer.sh > $ricer_path
-chown $username:$username $ricer_path
-chmod +x $ricer_path
-su -c $ricer_path -s /bin/sh $username
-
 # enable arch repos
 echo "${green}Enable arch repos.${reset}"
 pacman -Sy
@@ -150,6 +143,13 @@ echo "${green}Install package${reset}"
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop \
 	sxiv mpv zathura zathura-pdf-mupdf xclip zip unzip unrar p7zip zsh rsync firefox libnotify dunst \
 	bspwm sxhkd pamixer 
+
+# set ricing spesific installer
+ricer_path=/home/$username/ricing.sh
+sed '1,/^#system-ricing-config$/d' installer.sh > $ricer_path
+chown $username:$username $ricer_path
+chmod +x $ricer_path
+su -c $ricer_path -s /bin/sh $username
 
 # finish installation
 echo "Installation finished."
