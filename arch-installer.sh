@@ -153,6 +153,7 @@ su -c $ricer_path -s /bin/sh $username
 
 # finish installation
 echo "Installation finished."
+exit
 
 #system-ricing-config
 
