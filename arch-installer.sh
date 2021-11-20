@@ -161,6 +161,12 @@ exit
 
 #system-ricing-config
 
+# colors
+red=`tput setaf 1`
+green=`tput setaf 2`
+yellow=`tput setaf 3`
+reset=`tput sgr0`
+
 # create folders
 cd $HOME
 echo "${green}Create folders.${reset}"
