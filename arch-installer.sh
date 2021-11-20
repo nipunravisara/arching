@@ -41,13 +41,13 @@ echo "${green}-- Generate fstab.${reset}"
 fstabgen -U /mnt >> /mnt/etc/fstab
 
 # move installer to new system
-sed '1,/^#new-system-config$/d' arch-installer.sh > /mnt/installer.sh
-chmod +x /mnt/installer.sh
+sed '1,/^#new-system-config$/d' arch-installer.sh > /mnt/stage-two.sh
+chmod +x /mnt/stage-two.sh
 
 # go to system
 echo "${green}-- Move to new system.${reset}"
 artix-chroot /mnt 
-exec ./installer.sh
+exec ./stage-two.sh
 exit
 
 #new-system-config
@@ -129,8 +129,8 @@ ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default/
 echo "${green}-- Creating new user.${reset}"
 echo "${yellow}Enter Username and password: ${reset}"
 read username
-passwd
 useradd -m -G wheel -s /bin/sh $username
+passwd $username
 
 # enable arch repos
 echo "${green}Enable arch repos.${reset}"
@@ -141,15 +141,19 @@ pacman-key --populate archlinux
 # install packages
 echo "${green}Install package${reset}"
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop \
-	sxiv mpv zathura zathura-pdf-mupdf xclip zip unzip unrar p7zip zsh rsync firefox libnotify dunst \
-	bspwm sxhkd pamixer 
+	xclip zip unzip unrar p7zip zsh rsync rofi \
+	bspwm sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst
+
+# install oh-my-zsh and chnaging shell to zsh
+echo "${green}Changing shell to zsh.${reset}"
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # set ricing spesific installer
-ricer_path=/home/$username/ricing.sh
-sed '1,/^#system-ricing-config$/d' installer.sh > $ricer_path
-chown $username:$username $ricer_path
-chmod +x $ricer_path
-su -c $ricer_path -s /bin/sh $username
+stage_three_path=/home/$username/stage-three.sh
+sed '1,/^#system-ricing-config$/d' stage-two.sh > $stage_three_path
+chown $username:$username $stage_three_path
+chmod +x $stage_three_path
+su -c $stage_three_path -s /bin/zsh $username
 
 # finish installation
 echo "Installation finished."
