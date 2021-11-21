@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # colors
 red=`tput setaf 1`
 green=`tput setaf 2`
@@ -172,10 +174,12 @@ cd $HOME
 echo "${green}Create folders.${reset}"
 mkdir -p ~/documents ~/development ~/videos
 
-# clone dotfiles
-echo "${green}Clone dotfiles.${reset}"
-git clone --separate-git-dir=$HOME/.dotfiles https://github.com/anandpiyer/.dotfiles.git tmpdotfiles
-rsync --recursive --verbose --exclude '.git' tmpdotfiles/ $HOME/
-rm -r tmpdotfiles
+# installing dotfiles
+echo "${green}Installing dotfiles.${reset}"
+echo "alias d='/usr/bin/git --git-dir=$HOME/.dots/ --work-tree=$HOME'" >> .bashrc
+echo ".dots" >> .gitignore
+git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dots
+d checkout
+d config --local status.showUntrackedFiles no
 
-
+echo "${green}Dotfiles successfully installed.${reset}"
