@@ -12,9 +12,9 @@ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.
 source ~/.bashrc
 
 # create folders
-cd $HOME
-echo "${green}Create folders.${reset}"
-mkdir -p ~/documents ~/development ~/videos
+#cd $HOME
+#echo "${green}Create folders.${reset}"
+#mkdir -p ~/documents ~/development ~/videos
 
 # installing dotfiles
 echo "${green}Installing dotfiles.${reset}"
