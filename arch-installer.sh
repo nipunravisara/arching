@@ -43,7 +43,7 @@ echo "${green}-- Generate fstab.${reset}"
 fstabgen -U /mnt >> /mnt/etc/fstab
 
 # move installer to new system
-sed '1,/^#new-system-config$/d' arch-installer.sh > /mnt/stage-two.sh
+sed '1,/^#stage-two$/d' arch-installer.sh > /mnt/stage-two.sh
 chmod +x /mnt/stage-two.sh
 
 # go to system
@@ -52,7 +52,7 @@ artix-chroot /mnt
 exec ./stage-two.sh
 exit
 
-#new-system-config
+#stage-two
 
 # colors
 red=`tput setaf 1`
@@ -135,20 +135,20 @@ useradd -m -G wheel -s /bin/sh $username
 passwd $username
 
 # enable arch repos
-echo "${green}Enable arch repos.${reset}"
+echo "${green}-- Enable arch repos.${reset}"
 pacman -Sy
 echo -e "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n\n[community]\nInclude = /etc/pacman.d/mirrorlist-arch\n" >> /etc/pacman.conf
 pacman-key --populate archlinux
 
 # install packages
-echo "${green}Install package${reset}"
+echo "${green}-- Install package${reset}"
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop \
 	xclip zip unzip unrar p7zip zsh rsync rofi \
-	bspwm sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst
+	bspwm sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst alacritty
 
 # set ricing spesific installer
 stage_three_path=/home/$username/stage-three.sh
-sed '1,/^#system-ricing-config$/d' stage-two.sh > $stage_three_path
+sed '1,/^#stage-three$/d' stage-two.sh > $stage_three_path
 chown $username:$username $stage_three_path
 chmod +x $stage_three_path
 #su -c $stage_three_path -s /bin/zsh $username
@@ -157,7 +157,7 @@ chmod +x $stage_three_path
 echo "Installation finished."
 exit
 
-#system-ricing-config
+#stage-three
 
 # colors
 red=`tput setaf 1`
@@ -165,24 +165,22 @@ green=`tput setaf 2`
 yellow=`tput setaf 3`
 reset=`tput sgr0`
 
-# install oh-my-zsh and chnaging shell to zsh
-echo "${green}Changing shell to zsh.${reset}"
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-source ~/.bashrc
+# installing dotfiles
+echo "${green}-- Installing dotfiles.${reset}"
+alias d='/usr/bin/git --git-dir=$HOME/.dots/ --work-tree=$HOME'
+echo ".dots" >> .gitignore
+git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dots
+d checkout
+d config --local status.showUntrackedFiles no
 
 # create folders
 cd $HOME
 echo "${green}Create folders.${reset}"
-mkdir -p ~/documents ~/development ~/videos
+mkdir -p ~/Documents ~/Developments ~/Pictures ~/Videos
 
-# installing dotfiles
-echo "${green}Installing dotfiles.${reset}"
-echo "alias d='/usr/bin/git --git-dir=$HOME/.dots/ --work-tree=$HOME'" >> .zshrc
-echo ".dots" >> .gitignore
-git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dots
-source ~/.zshrc
-mv ~/.zshrc ~/.zshrc.back
-d checkout
-d config --local status.showUntrackedFiles no
+# install oh-my-zsh and chnaging shell to zsh
+echo "${green}-- Changing shell to zsh.${reset}"
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-echo "${green}Dotfiles successfully installed.${reset}"
+echo "${green}-- Your system is ready to roll --${reset}"
+
