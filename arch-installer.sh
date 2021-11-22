@@ -146,16 +146,12 @@ pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xback
 	xclip zip unzip unrar p7zip zsh rsync rofi \
 	bspwm sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst
 
-# install oh-my-zsh and chnaging shell to zsh
-echo "${green}Changing shell to zsh.${reset}"
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
 # set ricing spesific installer
 stage_three_path=/home/$username/stage-three.sh
 sed '1,/^#system-ricing-config$/d' stage-two.sh > $stage_three_path
 chown $username:$username $stage_three_path
 chmod +x $stage_three_path
-su -c $stage_three_path -s /bin/zsh $username
+#su -c $stage_three_path -s /bin/zsh $username
 
 # finish installation
 echo "Installation finished."
@@ -169,6 +165,11 @@ green=`tput setaf 2`
 yellow=`tput setaf 3`
 reset=`tput sgr0`
 
+# install oh-my-zsh and chnaging shell to zsh
+echo "${green}Changing shell to zsh.${reset}"
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+source ~/.bashrc
+
 # create folders
 cd $HOME
 echo "${green}Create folders.${reset}"
@@ -176,9 +177,11 @@ mkdir -p ~/documents ~/development ~/videos
 
 # installing dotfiles
 echo "${green}Installing dotfiles.${reset}"
-echo "alias d='/usr/bin/git --git-dir=$HOME/.dots/ --work-tree=$HOME'" >> .bashrc
+echo "alias d='/usr/bin/git --git-dir=$HOME/.dots/ --work-tree=$HOME'" >> .zshrc
 echo ".dots" >> .gitignore
 git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dots
+source ~/.zshrc
+mv ~/.zshrc ~/.zshrc.back
 d checkout
 d config --local status.showUntrackedFiles no
 
