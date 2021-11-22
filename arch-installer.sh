@@ -42,14 +42,13 @@ basestrap /mnt base base-devel runit elogind-runit linux-lts linux-firmware neov
 echo "${green}-- Generate fstab.${reset}"
 fstabgen -U /mnt >> /mnt/etc/fstab
 
-# move installer to new system
+# set stage two installer
 sed '1,/^#stage-two$/d' arch-installer.sh > /mnt/stage-two.sh
 chmod +x /mnt/stage-two.sh
 
 # go to system
 echo "${green}-- Move to new system.${reset}"
 artix-chroot /mnt 
-exec ./stage-two.sh
 exit
 
 #stage-two
@@ -129,7 +128,7 @@ ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default/
 
 # creating new user.
 echo "${green}-- Creating new user.${reset}"
-echo "${yellow}Enter Username and password: ${reset}"
+echo "${yellow}Enter Username: ${reset}"
 read username
 useradd -m -G wheel -s /bin/sh $username
 passwd $username
@@ -146,15 +145,12 @@ pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xback
 	xclip zip unzip unrar p7zip zsh rsync rofi \
 	bspwm sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst alacritty
 
-# set ricing spesific installer
+# set stage three installer
 stage_three_path=/home/$username/stage-three.sh
 sed '1,/^#stage-three$/d' stage-two.sh > $stage_three_path
 chown $username:$username $stage_three_path
 chmod +x $stage_three_path
 #su -c $stage_three_path -s /bin/zsh $username
-
-# finish installation
-echo "Installation finished."
 exit
 
 #stage-three
@@ -165,8 +161,8 @@ green=`tput setaf 2`
 yellow=`tput setaf 3`
 reset=`tput sgr0`
 
-# installing dotfiles
-echo "${green}-- Installing dotfiles.${reset}"
+# installdotfiles
+echo "${green}-- Install dotfiles.${reset}"
 alias d='/usr/bin/git --git-dir=$HOME/.dots/ --work-tree=$HOME'
 echo ".dots" >> .gitignore
 git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dots
@@ -175,7 +171,7 @@ d config --local status.showUntrackedFiles no
 
 # create folders
 cd $HOME
-echo "${green}Create folders.${reset}"
+echo "${green}-- Create folders.${reset}"
 mkdir -p ~/Documents ~/Developments ~/Pictures ~/Videos
 
 # install oh-my-zsh and chnaging shell to zsh
