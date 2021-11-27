@@ -48,7 +48,7 @@ chmod +x /mnt/stage-two.sh
 
 # go to system
 echo "${green}-- Move to new system.${reset}"
-artix-chroot /mnt 
+artix-chroot /mnt ./stage-two.sh
 exit
 
 #stage-two
@@ -122,9 +122,11 @@ pacman-key --populate archlinux
 
 # install packages
 echo "${green}-- Install package${reset}"
+#pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop \
+#	xclip zip unzip unrar p7zip zsh rsync rofi networkmanager networkmanager-runit \
+#	bspwm sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst alacritty
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop \
-	xclip zip unzip unrar p7zip zsh rsync rofi networkmanager networkmanager-runit \
-	bspwm sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst alacritty
+	zsh networkmanager networkmanager-runit
 
 # starting networkmanager.
 echo "${green}-- Starting network manager${reset}"
@@ -162,16 +164,16 @@ cd $HOME
 echo "${green}-- Install dotfiles.${reset}"
 git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dots
 echo ".dots" >> .gitignore
-/usr/bin/git --git-dir=$HOME/.dots/ --work-tree=$HOME config --local status.showUntrackedFiles no
-/usr/bin/git --git-dir=$HOME/.dots/ --work-tree=$HOME checkout
+alias dots='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+dots config --local status.showUntrackedFiles no
+dots checkout
 
 # create folders
-cd $HOME
-echo "${green}-- Create folders.${reset}"
-mkdir -p ~/Documents ~/Developments ~/Pictures ~/Videos
+#cd $HOME
+#echo "${green}-- Create folders.${reset}"
+#mkdir -p ~/Documents ~/Developments ~/Pictures ~/Videos
 
 # install oh-my-zsh and chnaging shell to zsh
 echo "${green}-- Changing shell to zsh.${reset}"
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-echo "${green}-- Your system is ready to roll --${reset}"
+exit
