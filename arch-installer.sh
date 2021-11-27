@@ -164,7 +164,8 @@ cd $HOME
 echo "${green}-- Install dotfiles.${reset}"
 git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dots
 echo ".dots" >> .gitignore
-alias dots='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+echo "alias dots='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> .bashrc
+source ~/.bashrc
 dots config --local status.showUntrackedFiles no
 dots checkout
 
