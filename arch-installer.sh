@@ -88,7 +88,7 @@ echo "${green}-- Install bootloader and relevent packages.${reset}"
 pacman --noconfirm -S grub os-prober ntfs-3g efibootmgr
 
 # choosing dual boot or single boot
-read -p "${}Do you wish to dualboot? [y/n]" answer
+read -p "${yellow}Do you wish to dualboot? [y/n]${reset}" answer
 if [[ $answer = y ]] ; then
      
      # mounting windows efi
