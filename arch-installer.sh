@@ -110,21 +110,29 @@ grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
 # generate grub conf
 grub-mkconfig -o /boot/grub/grub.cfg
 
-# set root password
-echo "${green}-- Set root user password.${reset}"
-passwd
-
 # setting up sudoers file.
 echo "${green}-- Setting up sudoers file.${reset}"
 echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-# install system packages
-echo "${green}-- Install system packages.${reset}"
-pacman -S --noconfirm networkmanager networkmanager-runit
+# enable arch repos
+echo "${green}-- Enable arch repos.${reset}"
+pacman -Sy
+echo -e "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n\n[community]\nInclude = /etc/pacman.d/mirrorlist-arch\n" >> /etc/pacman.conf
+pacman-key --populate archlinux
+
+# install packages
+echo "${green}-- Install package${reset}"
+pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop \
+	xclip zip unzip unrar p7zip zsh rsync rofi networkmanager networkmanager-runit \
+	bspwm sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst alacritty
 
 # starting networkmanager.
 echo "${green}-- Starting network manager${reset}"
 ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default/
+
+# set root password
+echo "${green}-- Set root user password.${reset}"
+passwd
 
 # creating new user.
 echo "${green}-- Creating new user.${reset}"
@@ -139,18 +147,6 @@ sed '1,/^#stage-three$/d' stage-two.sh > $stage_three_path
 chown $username:$username $stage_three_path
 chmod +x $stage_three_path
 su -c $stage_three_path -s /bin/bash $username
-
-# enable arch repos
-echo "${green}-- Enable arch repos.${reset}"
-pacman -Sy
-echo -e "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n\n[community]\nInclude = /etc/pacman.d/mirrorlist-arch\n" >> /etc/pacman.conf
-pacman-key --populate archlinux
-
-# install packages
-echo "${green}-- Install package${reset}"
-pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop \
-	xclip zip unzip unrar p7zip zsh rsync rofi \
-	bspwm sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst alacritty
 exit
 
 #stage-three
