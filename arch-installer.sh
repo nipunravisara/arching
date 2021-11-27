@@ -130,8 +130,15 @@ ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default/
 echo "${green}-- Creating new user.${reset}"
 echo "${yellow}Enter Username: ${reset}"
 read username
-useradd -m -G wheel -s /bin/sh $username
+useradd -m -G wheel -s /bin/bash $username
 passwd $username
+
+# set stage three installer
+stage_three_path=/home/$username/stage-three.sh
+sed '1,/^#stage-three$/d' stage-two.sh > $stage_three_path
+chown $username:$username $stage_three_path
+chmod +x $stage_three_path
+su -c $stage_three_path -s /bin/bash $username
 
 # enable arch repos
 echo "${green}-- Enable arch repos.${reset}"
@@ -144,13 +151,6 @@ echo "${green}-- Install package${reset}"
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop \
 	xclip zip unzip unrar p7zip zsh rsync rofi \
 	bspwm sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst alacritty
-
-# set stage three installer
-stage_three_path=/home/$username/stage-three.sh
-sed '1,/^#stage-three$/d' stage-two.sh > $stage_three_path
-chown $username:$username $stage_three_path
-chmod +x $stage_three_path
-su -c $stage_three_path -s /bin/bash $username
 exit
 
 #stage-three
@@ -162,12 +162,13 @@ yellow=`tput setaf 3`
 reset=`tput sgr0`
 
 # installdotfiles
+cd $HOME
 echo "${green}-- Install dotfiles.${reset}"
 git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dots
 echo ".dots" >> .gitignore
-alias d='/usr/bin/git --git-dir=$HOME/.dots/ --work-tree=$HOME'
-d checkout
-d config --local status.showUntrackedFiles no
+alias dots='/usr/bin/git --git-dir=$HOME/.dots/ --work-tree=$HOME'
+dots config --local status.showUntrackedFiles no
+dots checkout
 
 # create folders
 cd $HOME
