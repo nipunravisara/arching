@@ -166,9 +166,8 @@ cd $HOME
 echo "${green}-- Install dotfiles.${reset}"
 git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dots
 echo ".dots" >> .gitignore
-alias dots='/usr/bin/git --git-dir=$HOME/.dots/ --work-tree=$HOME'
-dots config --local status.showUntrackedFiles no
-dots checkout
+/usr/bin/git --git-dir=$HOME/.dots/ --work-tree=$HOME config --local status.showUntrackedFiles no
+/usr/bin/git --git-dir=$HOME/.dots/ --work-tree=$HOME checkout
 
 # create folders
 cd $HOME
