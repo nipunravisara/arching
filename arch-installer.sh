@@ -88,7 +88,7 @@ echo "${green}-- Install bootloader and relevent packages.${reset}"
 pacman --noconfirm -S grub os-prober ntfs-3g efibootmgr
 
 # choosing dual boot or single boot
-read -p "Do you wish to dualboot? [y/n]" answer
+read -p "${}Do you wish to dualboot? [y/n]" answer
 if [[ $answer = y ]] ; then
      
      # mounting windows efi
@@ -179,4 +179,3 @@ echo "${green}-- Changing shell to zsh.${reset}"
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 echo "${green}-- Your system is ready to roll --${reset}"
-
