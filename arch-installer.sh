@@ -96,11 +96,12 @@ if [[ $answer = y ]] ; then
      
      # mounting windows efi
      echo "${green}-- Mounting windows EFI.${reset}"
-     mkdir /boot/efi
+     mkdir /winefi
 
+     lsblk
      echo "${yellow}Enter windows EFI partition: ${reset}"
      read winefipartition
-     mount $winefipartition /boot/efi
+     mount $winefipartition /winefi
 fi
 
 # install grub on system
@@ -184,7 +185,6 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:
 # remove unwated files
 echo "${green}-- Cleaning.${reset}"
 rm -rf .zshrc
-rm -rf stage-three.sh
 mv .zshrc.pre-oh-my-zsh .zshrc
 htop
 exit
