@@ -124,7 +124,7 @@ pacman-key --populate archlinux
 echo "${green}-- Install package${reset}"
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop \
 	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug networkmanager networkmanager-runit \
-	bspwm sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst alacritty
+	bspwm picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst alacritty
 
 # starting networkmanager.
 echo "${green}-- Starting network manager${reset}"
