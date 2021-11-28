@@ -12,6 +12,8 @@ echo "${green}Starting installation...${reset}"
 echo "${green}-- Setting up keyboard layout.${reset}"
 loadkeys us
 
+# set system clock
+echo "${green}-- Set system clock.${reset}"
 timedatectl set-ntp true
 
 # format EFI partitions
@@ -33,6 +35,7 @@ echo "${green}-- Mounting partitons.${reset}"
 mount $rootpartition /mnt
 mkdir /mnt/boot
 mount $linuxefipartition /mnt/boot
+df
 
 # install linux system and essentials.
 echo "${green}-- Install linux system and essentials.${reset}"
@@ -100,12 +103,12 @@ if [[ $answer = y ]] ; then
      mount $winefipartition /boot/efi
 fi
 
+# install grub on system
+grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
+
 # enable os-prober
 echo -e "\n# Enable os-prober\nGRUB_DISABLE_OS_PROBER=false" >> /etc/default/grub
 os-prober
-
-# install grub on system
-grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
 
 # generate grub conf
 grub-mkconfig -o /boot/grub/grub.cfg
@@ -124,6 +127,7 @@ pacman-key --populate archlinux
 echo "${green}-- Install package${reset}"
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop \
 	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop networkmanager networkmanager-runit \
+	mesa xf86-video-intel vulkan-intel \
 	bspwm picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst alacritty
 
 # starting networkmanager.
@@ -138,7 +142,7 @@ passwd
 echo "${green}-- Creating new user.${reset}"
 echo "${yellow}Enter Username: ${reset}"
 read username
-useradd -m -G wheel -s /bin/sh $username
+useradd -m -G wheel,power -s /bin/sh $username
 passwd $username
 
 # set stage three installer
