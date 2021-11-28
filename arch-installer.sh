@@ -140,7 +140,7 @@ passwd
 echo "${green}-- Creating new user.${reset}"
 echo "${yellow}Enter Username: ${reset}"
 read username
-useradd -m -G wheel -s /bin/bash $username
+useradd -m -G wheel -s /bin/sh $username
 passwd $username
 
 # set stage three installer
@@ -148,7 +148,7 @@ stage_three_path=/home/$username/stage-three.sh
 sed '1,/^#stage-three$/d' stage-two.sh > $stage_three_path
 chown $username:$username $stage_three_path
 chmod +x $stage_three_path
-su -c $stage_three_path -s /bin/bash $username
+su -c $stage_three_path -s /bin/sh $username
 exit
 
 #stage-three
