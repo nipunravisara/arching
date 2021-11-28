@@ -123,7 +123,7 @@ pacman-key --populate archlinux
 # install packages
 echo "${green}-- Install package${reset}"
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop \
-	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug networkmanager networkmanager-runit \
+	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop networkmanager networkmanager-runit \
 	bspwm picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst alacritty
 
 # starting networkmanager.
@@ -174,4 +174,13 @@ dots checkout
 # install oh-my-zsh and chnaging shell to zsh
 echo "${green}-- Changing shell to zsh.${reset}"
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+# remove unwated files
+echo "${green}-- Cleaning.${reset}"
+rm -rf .zshrc
+rm -rf stage-three.sh
+mv .zshrc.pre-oh-my-zsh .zshrc
+htop
 exit
