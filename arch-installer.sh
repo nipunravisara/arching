@@ -162,8 +162,8 @@ reset=`tput sgr0`
 # installdotfiles
 cd $HOME
 echo "${green}-- Install dotfiles.${reset}"
-git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dots
-echo ".dots" >> .gitignore
+git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dotfiles
+echo ".dotfiles" >> .gitignore
 echo "alias dots='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> .bashrc
 source ~/.bashrc
 dots config --local status.showUntrackedFiles no
