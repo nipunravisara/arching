@@ -96,12 +96,12 @@ if [[ $answer = y ]] ; then
      
      # mounting windows efi
      echo "${green}-- Mounting windows EFI.${reset}"
-     mkdir /winefi
+     mkdir /boot/winefi
 
      lsblk
      echo "${yellow}Enter windows EFI partition: ${reset}"
      read winefipartition
-     mount $winefipartition /winefi
+     mount $winefipartition /boot/winefi
 fi
 
 # install grub on system
@@ -179,12 +179,19 @@ dots checkout
 # install oh-my-zsh and chnaging shell to zsh
 echo "${green}-- Changing shell to zsh.${reset}"
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# install oh-my-zsh extentions
+echo "${green}-- Install oh-my-zsh extentions.${reset}"
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
 # remove unwated files
 echo "${green}-- Cleaning.${reset}"
-rm -rf .zshrc
-mv .zshrc.pre-oh-my-zsh .zshrc
-htop
+rm -rf ~/.zshrc ~/.zsh_history ~/.bash_logout ~/.bash_profile ~/.bashrc ~/.shell.pre-oh-my-zsh ~/.zcompdump*
+ln -s ~/.config/x11/xinitrc .xinitrc
+ln -s ~/.config/x11/Xresources .Xresources
+ln -s ~/.config/zsh/zprofile .zprofile
+ln -s ~/.config/zsh/zshrc .zshrc
+
+echo "${green}-- Installation Completed --.${reset}"
 exit
