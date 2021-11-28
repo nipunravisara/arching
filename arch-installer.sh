@@ -159,20 +159,19 @@ green=`tput setaf 2`
 yellow=`tput setaf 3`
 reset=`tput sgr0`
 
-# installdotfiles
+# create folders
+cd $HOME
+echo "${green}-- Create folders.${reset}"
+mkdir -p ~/Documents ~/Developments ~/Pictures ~/Videos
+
+# install dotfiles
 cd $HOME
 echo "${green}-- Install dotfiles.${reset}"
 git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dotfiles
 echo ".dotfiles" >> .gitignore
-echo "alias dots='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> .bashrc
-source ~/.bashrc
+alias dots='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 dots config --local status.showUntrackedFiles no
 dots checkout
-
-# create folders
-#cd $HOME
-#echo "${green}-- Create folders.${reset}"
-#mkdir -p ~/Documents ~/Developments ~/Pictures ~/Videos
 
 # install oh-my-zsh and chnaging shell to zsh
 echo "${green}-- Changing shell to zsh.${reset}"
