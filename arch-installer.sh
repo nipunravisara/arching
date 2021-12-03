@@ -138,7 +138,8 @@ ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default/
 # starting bluetooth.
 echo "${green}-- Starting bluetooth${reset}"
 ln -s /etc/runit/sv/bluetoothd /run/runit/service
-echo "AutoEnable=true" >> /etc/bluetooth/main.conf
+sed '250iAutoEnable=true' /etc/bluetooth/main.conf
+
 # set root password
 echo "${green}-- Set root user password.${reset}"
 passwd
