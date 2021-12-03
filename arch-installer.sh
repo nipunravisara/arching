@@ -128,12 +128,16 @@ pacman-key --populate archlinux
 echo "${green}-- Install package${reset}"
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop xwallpaper scrot \
 	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop pulseaudio pulseaudio-alsa pulseaudio-bluetooth networkmanager networkmanager-runit \
-	pulseaudio-jack mesa xf86-video-intel vulkan-intel bluez bluez-utils \
+	pulseaudio-jack mesa xf86-video-intel vulkan-intel bluez bluez-utils bluez-tools bluez-runit \
 	bspwm picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst alacritty
 
 # starting networkmanager.
 echo "${green}-- Starting network manager${reset}"
 ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default/
+
+# starting bluetooth.
+echo "${green}-- Starting bluetooth${reset}"
+ln -s /etc/runit/sv/bluetoothd /run/runit/service
 
 # set root password
 echo "${green}-- Set root user password.${reset}"
