@@ -128,7 +128,7 @@ pacman-key --populate archlinux
 echo "${green}-- Install package${reset}"
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop xwallpaper scrot \
 	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop pulseaudio pulseaudio-alsa pulseaudio-bluetooth networkmanager networkmanager-runit \
-	pulseaudio-jack mesa xf86-video-intel vulkan-intel \
+	pulseaudio-jack mesa xf86-video-intel vulkan-intel bluez bluez-utils \
 	bspwm picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst alacritty
 
 # starting networkmanager.
