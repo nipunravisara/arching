@@ -129,7 +129,7 @@ echo "${green}-- Install package${reset}"
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop xwallpaper scrot \
 	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop pulseaudio pulseaudio-alsa pulseaudio-bluetooth networkmanager networkmanager-runit \
 	pulseaudio-jack mesa xf86-video-intel vulkan-intel bluez bluez-utils bluez-tools bluez-runit pulseaudio-bluetooth powertop libinput \
-	bspwm picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst alacritty
+	bspwm picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst alacritty highlight
 
 # starting networkmanager.
 echo "${green}-- Starting network manager${reset}"
@@ -184,6 +184,10 @@ echo ".dotfiles" >> .gitignore
 alias dots='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 dots config --local status.showUntrackedFiles no
 dots checkout
+
+# install ranger icons
+echo "${green}-- Install ranger icons.${reset}"
+git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons
 
 # install oh-my-zsh and chnaging shell to zsh
 echo "${green}-- Changing shell to zsh.${reset}"
