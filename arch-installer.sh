@@ -126,8 +126,6 @@ pacman-key --populate archlinux
 
 # install packages
 echo "${green}-- Install package${reset}"
-echo "${green}-- checking${reset}"
-pacman -Sy
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop xwallpaper scrot \
 	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop pulseaudio pulseaudio-alsa pulseaudio-bluetooth networkmanager networkmanager-runit \
 	pulseaudio-jack mesa xf86-video-intel vulkan-intel bluez bluez-utils bluez-tools bluez-runit pulseaudio-bluetooth powertop libinput \
@@ -172,11 +170,11 @@ reset=`tput sgr0`
 # create folders
 cd $HOME
 echo "${green}-- Create folders.${reset}"
-mkdir -p ~/Documents ~/Developments ~/Pictures ~/Videos
+mkdir -p ~/Documents ~/Developments ~/Pictures/Wallpapers ~/Videos
 
 # download wallpaper
 echo "${green}-- Download wallpaper.${reset}"
-curl -o ~/Pictures/Green-leaves.jpeg https://images.pexels.com/photos/1072179/pexels-photo-1072179.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
+curl -o ~/Pictures/Wallpapers/Green-leaves.jpeg https://images.pexels.com/photos/1072179/pexels-photo-1072179.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
 
 # install dotfiles
 cd $HOME
@@ -201,7 +199,7 @@ git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-m
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
 # remove unwated files
-echo "${green}-- Cleaning.${reset}"
+echo "${green}-- Cleaning and linking.${reset}"
 rm -rf ~/.zshrc ~/.zsh_history ~/.bash_logout ~/.bash_profile ~/.bashrc ~/.shell.pre-oh-my-zsh ~/.zcompdump*
 ln -s ~/.config/x11/xinitrc .xinitrc
 ln -s ~/.config/x11/Xresources .Xresources
