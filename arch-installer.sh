@@ -174,7 +174,7 @@ mkdir -p ~/Documents ~/Developments ~/Pictures ~/Videos
 
 # download wallpaper
 echo "${green}-- Download wallpaper.${reset}"
-curl -o ~/Pictures/mountain.png https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2352&q=80
+curl -o ~/Pictures/Green-leaves.jpeg https://images.pexels.com/photos/1072179/pexels-photo-1072179.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
 
 # install dotfiles
 cd $HOME
