@@ -39,7 +39,7 @@ df
 
 # install linux system and essentials.
 echo "${green}-- Install linux system and essentials.${reset}"
-basestrap /mnt base base-devel runit elogind-runit linux-lts linux-firmware neovim curl git dosfstools grub os-prober ntfs-3g efibootmgr artix-archlinux-support
+basestrap /mnt base base-devel runit elogind-runit linux linux-firmware neovim curl git dosfstools grub os-prober ntfs-3g efibootmgr artix-archlinux-support
 
 # generate fstab
 echo "${green}-- Generate fstab.${reset}"
