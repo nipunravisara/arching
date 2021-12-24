@@ -126,6 +126,8 @@ pacman-key --populate archlinux
 
 # install packages
 echo "${green}-- Install package${reset}"
+read -p "${yellow}Install packages? [y/n]${reset}" answer
+pacman -Sy
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop xwallpaper scrot \
 	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop pulseaudio pulseaudio-alsa pulseaudio-bluetooth networkmanager networkmanager-runit \
 	pulseaudio-jack mesa xf86-video-intel vulkan-intel bluez bluez-utils bluez-tools bluez-runit pulseaudio-bluetooth powertop libinput \
