@@ -126,6 +126,8 @@ pacman-key --populate archlinux
 
 # install packages
 echo "${green}-- Install package${reset}"
+echo "${green}-- checking${reset}"
+pacman -Sy
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop xwallpaper scrot \
 	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop pulseaudio pulseaudio-alsa pulseaudio-bluetooth networkmanager networkmanager-runit \
 	pulseaudio-jack mesa xf86-video-intel vulkan-intel bluez bluez-utils bluez-tools bluez-runit pulseaudio-bluetooth powertop libinput \
@@ -156,7 +158,7 @@ stage_three_path=/home/$username/stage-three.sh
 sed '1,/^#stage-three$/d' stage-two.sh > $stage_three_path
 chown $username:$username $stage_three_path
 chmod +x $stage_three_path
-su -c $stage_three_path -s /bin/sh $username
+#su -c $stage_three_path -s /bin/sh $username
 exit
 
 #stage-three
