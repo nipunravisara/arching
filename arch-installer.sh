@@ -128,10 +128,35 @@ pacman-key --populate archlinux
 echo "${green}-- Install package${reset}"
 read -p "${yellow}Install packages? [y/n]${reset}" answer
 pacman -Sy
-pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop xwallpaper scrot \
+pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop xwallpaper scrot python-pywal \
 	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop pulseaudio pulseaudio-alsa pulseaudio-bluetooth networkmanager networkmanager-runit \
 	pulseaudio-jack mesa xf86-video-intel vulkan-intel bluez bluez-utils bluez-tools bluez-runit pulseaudio-bluetooth powertop libinput \
-	bspwm picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox libnotify dunst alacritty highlight wmctrl deepin-gtk-theme
+	picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox firefox-developer-edition libnotify dunst alacritty highlight wmctrl deepin-gtk-theme
+
+# install window manager
+echo "${green}-- Install window manager.${reset}"
+PS3='Please select a window manager: '
+options=("herbstluftwm" "bspwm" "Don't install a wm")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Option 1")
+            echo "${green}-- Installing herbstluftwm.${reset}"
+	    pacman -S --noconfirm herbstluftwm
+	    break
+            ;;
+        "Option 2")
+            echo "${green}-- Installing bspwm.${reset}"
+	    pacman -S --noconfirm bspwm
+	    break
+            ;;
+        "Quit")
+            echo "${green}-- Skip installing window manager.${reset}"
+            break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
 
 # starting networkmanager.
 echo "${green}-- Starting network manager${reset}"
@@ -208,5 +233,6 @@ ln -s ~/.config/x11/Xresources .Xresources
 ln -s ~/.config/zsh/zprofile .zprofile
 ln -s ~/.config/zsh/zshrc .zshrc
 
-echo "${green}-- Installation Completed --.${reset}"
+
+echo "${green}-- Installation Completed, Restart to use your system. --${reset}"
 exit
