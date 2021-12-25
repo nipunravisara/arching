@@ -134,24 +134,22 @@ pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xback
 	picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox firefox-developer-edition libnotify dunst alacritty highlight wmctrl deepin-gtk-theme
 
 # install window manager
-echo "${green}-- Install window manager.${reset}"
-PS3='Please select a window manager: '
-options=("herbstluftwm" "bspwm" "Don't install a wm")
+echo "${green}-- Select a window manager to install.${reset}"
+options=("Herbstluftwm" "BSPWM" "Skip, Install manually")
 select opt in "${options[@]}"
 do
     case $opt in
-        "Option 1")
+        "Herbstluftwm")
             echo "${green}-- Installing herbstluftwm.${reset}"
-	    pacman -S --noconfirm herbstluftwm
-	    break
+            pacman -S --noconfirm herbstluftwm
+            break
             ;;
-        "Option 2")
-            echo "${green}-- Installing bspwm.${reset}"
-	    pacman -S --noconfirm bspwm
-	    break
+        "BSPWM")
+            echo "${green}-- Installing herbstluftwm.${reset}"
+            pacman -S --noconfirm bspwm
+            break
             ;;
-        "Quit")
-            echo "${green}-- Skip installing window manager.${reset}"
+        "Skip, Install manually")
             break
             ;;
         *) echo "invalid option $REPLY";;
