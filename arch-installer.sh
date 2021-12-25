@@ -140,19 +140,20 @@ select opt in "${options[@]}"
 do
     case $opt in
         "Herbstluftwm")
-            echo "${green}-- Installing herbstluftwm.${reset}"
+            echo "${green}-- Installing $opt.${reset}"
             pacman -S --noconfirm herbstluftwm
             break
             ;;
         "BSPWM")
-            echo "${green}-- Installing herbstluftwm.${reset}"
+            echo "${green}-- Installing $opt.${reset}"
             pacman -S --noconfirm bspwm
             break
             ;;
         "Skip, Install manually")
+            echo "${yellow}-- Skipping wm install.${reset}"
             break
             ;;
-        *) echo "invalid option $REPLY";;
+        *) echo "${yellow}invalid option $REPLY, Try again.${reset}";;
     esac
 done
 
@@ -210,10 +211,6 @@ alias dots='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 dots config --local status.showUntrackedFiles no
 dots checkout
 
-# install ranger icons
-echo "${green}-- Install ranger icons.${reset}"
-git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons
-
 # install oh-my-zsh and chnaging shell to zsh
 echo "${green}-- Changing shell to zsh.${reset}"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -223,6 +220,10 @@ echo "${green}-- Install oh-my-zsh extentions.${reset}"
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
+# install ranger icons
+echo "${green}-- Install ranger icons.${reset}"
+git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons
+
 # remove unwated files
 echo "${green}-- Cleaning and linking.${reset}"
 rm -rf ~/.zshrc ~/.zsh_history ~/.bash_logout ~/.bash_profile ~/.bashrc ~/.shell.pre-oh-my-zsh ~/.zcompdump*
@@ -230,7 +231,6 @@ ln -s ~/.config/x11/xinitrc .xinitrc
 ln -s ~/.config/x11/Xresources .Xresources
 ln -s ~/.config/zsh/zprofile .zprofile
 ln -s ~/.config/zsh/zshrc .zshrc
-
 
 echo "${green}-- Installation Completed, Restart to use your system. --${reset}"
 exit
