@@ -12,6 +12,11 @@ echo "${green}Starting arch installation...${reset}"
 echo "${green}-- Setting up keyboard layout.${reset}"
 loadkeys us
 
+# sort mirror list
+echo "${green}-- Pick best mirrors.${reset}"
+reflector --latest 20 --sort rate --save /etc/pacman.d/mirrorlist --protocol https --download-timeout 5
+sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
+
 # set system clock
 echo "${green}-- Set system clock.${reset}"
 timedatectl set-ntp true
@@ -175,7 +180,7 @@ stage_three_path=/home/$username/stage-three.sh
 sed '1,/^#stage-three$/d' stage-two.sh > $stage_three_path
 chown $username:$username $stage_three_path
 chmod +x $stage_three_path
-su -c $stage_three_path -s /bin/zsh $username
+su -c $stage_three_path -s /bin/sh $username
 exit
 
 #stage-three
