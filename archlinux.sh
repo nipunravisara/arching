@@ -172,7 +172,7 @@ passwd
 echo "${green}-- Creating new user.${reset}"
 echo "${yellow}Enter Username: ${reset}"
 read username
-useradd -m -G wheel,power,storage,audio,video,optical -s /bin/zsh $username
+useradd -m -G wheel,power,storage,audio,video,optical -s /bin/sh $username
 passwd $username
 
 # set stage three installer
@@ -231,4 +231,12 @@ ln -s ~/.config/zsh/zprofile .zprofile
 ln -s ~/.config/zsh/zshrc .zshrc
 
 echo "${green}-- Installation Completed, Restart to use your system. --${reset}"
+
+# restart
+read -p "${yellow}Restart now? [y/n]${reset}" answer
+if [[ $answer = y ]] ; then
+     # unmount and restart
+     umount -f /mnt
+     reboot
+fi
 exit
