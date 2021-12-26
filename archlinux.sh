@@ -6,7 +6,7 @@ green=`tput setaf 2`
 yellow=`tput setaf 3`
 reset=`tput sgr0`
 
-echo "${green}Starting installation...${reset}"
+echo "${green}Starting arch installation...${reset}"
 
 # setup keyboard layout
 echo "${green}-- Setting up keyboard layout.${reset}"
@@ -39,11 +39,11 @@ df
 
 # install linux system and essentials.
 echo "${green}-- Install linux system and essentials.${reset}"
-basestrap /mnt base base-devel runit elogind-runit linux linux-firmware neovim curl git dosfstools grub os-prober ntfs-3g efibootmgr artix-archlinux-support
+pacstrap /mnt base linux linux-firmware net-tools networkmanager openssh vi base-devel neovim curl git
 
 # generate fstab
 echo "${green}-- Generate fstab.${reset}"
-fstabgen -U /mnt >> /mnt/etc/fstab
+genfstab -U /mnt >> /mnt/etc/fstab
 
 # set stage two installer
 sed '1,/^#stage-two$/d' arch-installer.sh > /mnt/stage-two.sh
@@ -51,7 +51,7 @@ chmod +x /mnt/stage-two.sh
 
 # go to system
 echo "${green}-- Move to new system.${reset}"
-artix-chroot /mnt ./stage-two.sh
+arch-chroot /mnt ./stage-two.sh
 exit
 
 #stage-two
@@ -62,19 +62,20 @@ green=`tput setaf 2`
 yellow=`tput setaf 3`
 reset=`tput sgr0`
 
-# set local time zone
-echo "${green}-- Set time zone.${reset}"
-ln -sf /usr/share/zoneinfo/Asia/Colombo /etc/localtime
-
-# update hardware clock
-echo "${green}-- Update hardware clock.${reset}"
-hwclock --systohc
 
 # set system language
 echo "${green}-- Set system language.${reset}"
 sed '/en_US.UTF-8 UTF-8/s/^#//' -i /etc/locale.gen
 locale-gen
 echo 'LANG=en_US.UTF-8' >> /etc/locale.conf
+
+# set local time zone
+echo "${green}-- Set time zone.${reset}"
+ln -sf /usr/share/zoneinfo/Asia/Colombo /etc/localtime
+
+# update hardware clock
+echo "${green}-- Update hardware clock.${reset}"
+hwclock --systohc --utc
 
 # crate hostname
 echo "${green}-- Set system hostname.${reset}"
@@ -90,47 +91,41 @@ echo -e "\n127.0.0.1    localhost\n::1          localhost\n127.0.0.1    desktop.
 echo "${green}-- Install bootloader and relevent packages.${reset}"
 pacman --noconfirm -S grub os-prober ntfs-3g efibootmgr
 
+
+# install grub on system
+grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
+
 # choosing dual boot or single boot
 read -p "${yellow}Do you wish to dualboot? [y/n]${reset}" answer
 if [[ $answer = y ]] ; then
      
+     # enable os-prober
+     echo -e "\n# Enable os-prober\nGRUB_DISABLE_OS_PROBER=false" >> /etc/default/grub
+
      # mounting windows efi
      echo "${green}-- Mounting windows EFI.${reset}"
      mkdir /boot/winefi
 
      lsblk
+     
      echo "${yellow}Enter windows EFI partition: ${reset}"
      read winefipartition
      mount $winefipartition /boot/winefi
 fi
-
-# install grub on system
-grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
-
-# enable os-prober
-echo -e "\n# Enable os-prober\nGRUB_DISABLE_OS_PROBER=false" >> /etc/default/grub
-os-prober
 
 # generate grub conf
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # setting up sudoers file.
 echo "${green}-- Setting up sudoers file.${reset}"
-echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-# enable arch repos
-echo "${green}-- Enable arch repos.${reset}"
-pacman -Sy
-echo -e "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n\n[community]\nInclude = /etc/pacman.d/mirrorlist-arch\n" >> /etc/pacman.conf
-pacman-key --populate archlinux
+echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 
 # install packages
 echo "${green}-- Install package${reset}"
-read -p "${yellow}Install packages? [y/n]${reset}" answer
 pacman -Sy
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop xwallpaper scrot python-pywal \
-	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop pulseaudio pulseaudio-alsa pulseaudio-bluetooth networkmanager networkmanager-runit \
-	pulseaudio-jack mesa xf86-video-intel vulkan-intel bluez bluez-utils bluez-tools bluez-runit pulseaudio-bluetooth powertop libinput \
+	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop pulseaudio pulseaudio-alsa pulseaudio-bluetooth networkmanager \
+	pulseaudio-jack mesa xf86-video-intel vulkan-intel bluez bluez-utils bluez-tools pulseaudio-bluetooth powertop libinput \
 	picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox firefox-developer-edition libnotify dunst alacritty highlight wmctrl deepin-gtk-theme
 
 # install window manager
@@ -159,11 +154,11 @@ done
 
 # starting networkmanager.
 echo "${green}-- Starting network manager${reset}"
-ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default/
+systemctl enable NetworkManager.service 
 
 # starting bluetooth.
 echo "${green}-- Starting bluetooth${reset}"
-ln -s /etc/runit/sv/bluetoothd /run/runit/service
+sudo systemctl enable bluetooth.service
 sed '250iAutoEnable=true' /etc/bluetooth/main.conf
 
 # set root password
@@ -174,7 +169,7 @@ passwd
 echo "${green}-- Creating new user.${reset}"
 echo "${yellow}Enter Username: ${reset}"
 read username
-useradd -m -G wheel,power -s /bin/sh $username
+useradd -m -G wheel,power,storage,audio,video,optical -s /bin/zsh $username
 passwd $username
 
 # set stage three installer
@@ -182,7 +177,7 @@ stage_three_path=/home/$username/stage-three.sh
 sed '1,/^#stage-three$/d' stage-two.sh > $stage_three_path
 chown $username:$username $stage_three_path
 chmod +x $stage_three_path
-su -c $stage_three_path -s /bin/sh $username
+su -c $stage_three_path -s /bin/zsh $username
 exit
 
 #stage-three
