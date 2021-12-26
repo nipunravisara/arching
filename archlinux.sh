@@ -46,7 +46,7 @@ echo "${green}-- Generate fstab.${reset}"
 genfstab -U /mnt >> /mnt/etc/fstab
 
 # set stage two installer
-sed '1,/^#stage-two$/d' arch-installer.sh > /mnt/stage-two.sh
+sed '1,/^#stage-two$/d' archlinux.sh > /mnt/stage-two.sh
 chmod +x /mnt/stage-two.sh
 
 # go to system
@@ -61,7 +61,6 @@ red=`tput setaf 1`
 green=`tput setaf 2`
 yellow=`tput setaf 3`
 reset=`tput sgr0`
-
 
 # set system language
 echo "${green}-- Set system language.${reset}"
@@ -90,7 +89,6 @@ echo -e "\n127.0.0.1    localhost\n::1          localhost\n127.0.0.1    desktop.
 # install bootloader and relevent packages
 echo "${green}-- Install bootloader and relevent packages.${reset}"
 pacman --noconfirm -S grub os-prober ntfs-3g efibootmgr
-
 
 # install grub on system
 grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
