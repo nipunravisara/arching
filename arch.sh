@@ -187,12 +187,11 @@ $USR "curl -o /home/"$USERNAME"/Pictures/Wallpapers/Green-leaves.jpeg https://im
 echo && echo "Wallpaper downloaded. Type any key to continue."; read empty
 
 # install dotfiles
-cd $HOME
 echo "${green}-- Installing dotfiles.${reset}"
 $USR "git clone --bare https://github.com/nipunravisara/dots.git /home/"$USERNAME"/.dotfiles"
 $USR "echo ".dotfiles" >> /home/"$USERNAME"/.gitignore"
-$USR "$DOT dots config --local status.showUntrackedFiles no"
-$USR "$DOT dots checkout"
+$USR "$DOT config --local status.showUntrackedFiles no"
+$USR "$DOT checkout"
 
 # install oh-my-zsh and chnaging shell to zsh
 echo "${green}-- Changing shell to zsh.${reset}"
