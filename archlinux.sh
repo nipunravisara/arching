@@ -78,7 +78,7 @@ echo && echo "Time zone updated. Press any key to continue..."; read empty
 echo "${green}-- Setting system locale.${reset}"
 sed '/#en_US.UTF-8 UTF-8/c\en_US.UTF-8 UTF-8' -i /etc/locale.gen
 locale-gen
-echo "LANG=$LOCALE" > /etc/locale.conf
+echo "LANG="$LOCALE"" > /etc/locale.conf
 echo && echo "System locale updated. Type any key to continue."; read empty
 
 # crate hostname
@@ -142,7 +142,7 @@ echo && echo "New user created. Type any key to continue."; read empty
 # install packages
 echo "${green}-- Installing utility packages.${reset}"
 pacman -Sy
-pacman -S --noconfirm xorg xorg-xinit xwallpaper scrot python-pywal firefox firefox-developer-edition git \
+pacman -S --noconfirm xorg xorg-xinit xwallpaper scrot python-pywal firefox firefox-developer-edition git neovim \
 	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop pulseaudio pulseaudio-alsa pulseaudio-bluetooth networkmanager \
 	pulseaudio-jack mesa xf86-video-intel vulkan-intel bluez bluez-utils bluez-tools pulseaudio-bluetooth powertop libinput \
 	picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf libnotify dunst alacritty highlight wmctrl deepin-gtk-theme
@@ -202,7 +202,6 @@ echo && echo "Folders created. Type any key to continue."; read empty
 # download wallpaper
 echo "${green}-- Download wallpaper.${reset}"
 curl -o ~/Pictures/Wallpapers/Green-leaves.jpeg https://images.pexels.com/photos/1072179/pexels-photo-1072179.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
-ls ~Pictures/Wallpapers -la
 echo && echo "Wallpaper downloaded. Type any key to continue."; read empty
 
 # install dotfiles
@@ -210,40 +209,52 @@ cd $HOME
 echo "${green}-- Install dotfiles.${reset}"
 git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dotfiles
 ls -la
-echo && echo "Type any key to continue."; read empty
+echo && echo "Dotfiles cloned. Type any key to continue."; read empty
+
 echo ".dotfiles" >> .gitignore
+ls -la
 echo && echo "Gitignore added. Type any key to continue."; read empty
+
 alias dots='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 echo && echo "Alias added. Type any key to continue."; read empty
+
 dots config --local status.showUntrackedFiles no
 dots checkout
-echo && echo "Type any key to continue."; read empty
+ls -la
+echo && echo "Checkedout to dotfiles. Type any key to continue."; read empty
 
 # install oh-my-zsh and chnaging shell to zsh
 echo "${green}-- Changing shell to zsh.${reset}"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-echo && echo "Type any key to continue."; read empty
+echo && echo "Oh-my-zsh installed. Type any key to continue."; read empty
 
 # install oh-my-zsh extentions
 echo "${green}-- Install oh-my-zsh extentions.${reset}"
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-echo && echo "Type any key to continue."; read empty
+echo && echo "Oh-my-zsh extentions installed. Type any key to continue."; read empty
+
+# install vimplug
+echo "${green}-- Installing vimplug.${reset}"
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+echo && echo "Vimplug installed. Type any key to continue."; read empty
 
 # install ranger icons
 echo "${green}-- Install ranger icons.${reset}"
 git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons
-echo && echo "Type any key to continue."; read empty
+echo && echo "Ranger icons installed. Type any key to continue."; read empty
 
 # remove unwated files
 echo "${green}-- Cleaning and linking.${reset}"
+ls -la
 rm -rf ~/.zshrc ~/.zsh_history ~/.bash_logout ~/.bash_profile ~/.bashrc ~/.shell.pre-oh-my-zsh ~/.zcompdump*
 ln -s ~/.config/x11/xinitrc .xinitrc
 ln -s ~/.config/x11/Xresources .Xresources
 ln -s ~/.config/zsh/zprofile .zprofile
 ln -s ~/.config/zsh/zshrc .zshrc
-echo && echo "Type any key to continue."; read empty
-
+ls -la
+echo && echo "Files cleanned. Type any key to continue."; read empty
 
 echo "${green}-- Installation Completed, Restart to use your system. --${reset}"
 chsh -s $(which zsh)
