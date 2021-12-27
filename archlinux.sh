@@ -76,7 +76,7 @@ echo && echo "Time zone updated. Press any key to continue..."; read empty
 
 # set system locale
 echo "${green}-- Setting system locale.${reset}"
-sed '/en_US.UTF-8 UTF-8/s/^#//' -i /etc/locale.gen
+sed '/#en_US.UTF-8 UTF-8/c\en_US.UTF-8 UTF-8' -i /etc/locale.gen
 locale-gen
 echo "LANG=$LOCALE" > /etc/locale.conf
 echo && echo "System locale updated. Type any key to continue."; read empty
@@ -175,7 +175,10 @@ stage_three_path=/home/"$USERNAME"/stage-three.sh
 sed '1,/^#stage-three$/d' stage-two.sh > $stage_three_path
 chown "$USERNAME":"$USERNAME" $stage_three_path
 chmod +x $stage_three_path
-#su -c $stage_three_path -s /bin/bash "$USERNAME"
+ls
+ls /home/"$USERNAME" -la
+echo && echo "Script ready. Type any key to continue."; read empty
+su -c $stage_three_path -s /bin/bash "$USERNAME"
 exit
 
 #stage-three
@@ -190,6 +193,8 @@ reset=`tput sgr0`
 cd $HOME
 echo "${green}-- Create folders.${reset}"
 mkdir -p ~/Documents ~/Developments ~/Pictures/Wallpapers ~/Videos
+ls -la
+ls /home/"$USERNAME" -la
 echo && echo "Folders created. Type any key to continue."; read empty
 
 # download wallpaper
