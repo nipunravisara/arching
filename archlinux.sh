@@ -71,16 +71,14 @@ reset=`tput sgr0`
 # set time zone
 echo "${green}-- Setting system language.${reset}"
 ln -sf /usr/share/zoneinfo/"$TIME_ZONE" /etc/localtime
-hwclock --systohc --utc
-date
+hwclock --systohc
 echo && echo "Time zone updated. Press any key to continue..."; read empty
 
 # set system locale
 echo "${green}-- Setting system locale.${reset}"
-sed -i "s/#$LOCALE/$LOCALE/g" /etc/locale.gen
+sed '/en_US.UTF-8 UTF-8/s/^#//' -i /etc/locale.gen
 locale-gen
 echo "LANG=$LOCALE" > /etc/locale.conf
-export LANG="$LOCALE"
 echo && echo "System locale updated. Type any key to continue."; read empty
 
 # crate hostname
@@ -146,10 +144,7 @@ echo && echo "New user created. Type any key to continue."; read empty
 # install packages
 echo "${green}-- Installing utility packages.${reset}"
 pacman -Sy
-pacman -S --noconfirm xorg xorg-xinit xwallpaper scrot python-pywal firefox firefox-developer-edition git \
-	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop pulseaudio pulseaudio-alsa pulseaudio-bluetooth networkmanager \
-	pulseaudio-jack mesa xf86-video-intel vulkan-intel bluez bluez-utils bluez-tools pulseaudio-bluetooth powertop libinput \
-	picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf libnotify dunst alacritty highlight wmctrl deepin-gtk-theme
+pacman -S --noconfirm xorg xorg-xinit xwallpaper git
 echo && echo "Utility packages installed. Type any key to continue."; read empty
 
 # install window manager
@@ -197,32 +192,41 @@ reset=`tput sgr0`
 cd $HOME
 echo "${green}-- Create folders.${reset}"
 mkdir -p ~/Documents ~/Developments ~/Pictures/Wallpapers ~/Videos
+echo && echo "Folders created. Type any key to continue."; read empty
 
 # download wallpaper
 echo "${green}-- Download wallpaper.${reset}"
 curl -o ~/Pictures/Wallpapers/Green-leaves.jpeg https://images.pexels.com/photos/1072179/pexels-photo-1072179.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
+echo && echo "Wallpaper downloaded. Type any key to continue."; read empty
 
 # install dotfiles
 cd $HOME
 echo "${green}-- Install dotfiles.${reset}"
 git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dotfiles
+echo && echo "Type any key to continue."; read empty
 echo ".dotfiles" >> .gitignore
+echo && echo "ignore Type any key to continue."; read empty
 alias dots='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+echo && echo "alias Type any key to continue."; read empty
 dots config --local status.showUntrackedFiles no
 dots checkout
+echo && echo "Type any key to continue."; read empty
 
 # install oh-my-zsh and chnaging shell to zsh
 echo "${green}-- Changing shell to zsh.${reset}"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+echo && echo "Type any key to continue."; read empty
 
 # install oh-my-zsh extentions
 echo "${green}-- Install oh-my-zsh extentions.${reset}"
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+echo && echo "Type any key to continue."; read empty
 
 # install ranger icons
 echo "${green}-- Install ranger icons.${reset}"
 git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons
+echo && echo "Type any key to continue."; read empty
 
 # remove unwated files
 echo "${green}-- Cleaning and linking.${reset}"
@@ -231,6 +235,7 @@ ln -s ~/.config/x11/xinitrc .xinitrc
 ln -s ~/.config/x11/Xresources .Xresources
 ln -s ~/.config/zsh/zprofile .zprofile
 ln -s ~/.config/zsh/zshrc .zshrc
+echo && echo "Type any key to continue."; read empty
 
 echo "${green}-- Installation Completed, Restart to use your system. --${reset}"
 exit
