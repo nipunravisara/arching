@@ -177,7 +177,7 @@ stage_three_path=/home/"$USERNAME"/stage-three.sh
 sed '1,/^#stage-three$/d' stage-two.sh > $stage_three_path
 chown "$USERNAME":"$USERNAME" $stage_three_path
 chmod +x $stage_three_path
-su -c $stage_three_path -s /bin/bash "$USERNAME"
+#su -c $stage_three_path -s /bin/bash "$USERNAME"
 exit
 
 #stage-three
