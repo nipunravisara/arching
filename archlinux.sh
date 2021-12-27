@@ -142,6 +142,10 @@ echo && echo "New user created. Type any key to continue."; read empty
 # install packages
 echo "${green}-- Installing utility packages.${reset}"
 pacman -Sy
+pacman -S --noconfirm xorg xorg-xinit xwallpaper scrot python-pywal firefox firefox-developer-edition git \
+	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop pulseaudio pulseaudio-alsa pulseaudio-bluetooth networkmanager \
+	pulseaudio-jack mesa xf86-video-intel vulkan-intel bluez bluez-utils bluez-tools pulseaudio-bluetooth powertop libinput \
+	picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf libnotify dunst alacritty highlight wmctrl deepin-gtk-theme
 echo && echo "Utility packages installed. Type any key to continue."; read empty
 
 # install window manager
