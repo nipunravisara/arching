@@ -7,23 +7,15 @@ yellow=`tput setaf 3`
 reset=`tput sgr0`
 
 # varibales
-DEVICE=/dev/nvme0n1
+DEVICE=/dev/sda
 HOSTNAME="rbthl"
 
-WIN_DEVICE="${DEVICE}p1"
-BOOT_DEVICE="${DEVICE}p4"
-ROOT_DEVICE="${DEVICE}p5"
-
-BOOT_SIZE=512M
-ROOT_SIZE=
+WIN_DEVICE="${DEVICE}1"
+BOOT_DEVICE="${DEVICE}2"
+ROOT_DEVICE="${DEVICE}3"
 
 TIME_ZONE="Asia/Colombo"
 LOCALE="en_US.UTF-8"
-
-# sort mirror list
-echo "${green}-- Pick best mirrors.${reset}"
-reflector --latest 20 --sort rate --save /etc/pacman.d/mirrorlist --protocol https --download-timeout 5
-sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 
 # set system clock
 echo "${green}-- Setting system clock.${reset}"
