@@ -94,7 +94,8 @@ echo && echo "Services installed and enabled. Type any key to continue."; read e
 
 # setting up sudoers file.
 echo "${green}-- Setting up sudoers file.${reset}"
-arch-chroot /mnt sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g' /etc/sudoers
+arch-chroot /mnt echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+#arch-chroot /mnt sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g' /etc/sudoers
 echo && echo "Sudoers file updated. Type any key to continue."; read empty
 
 # install bootloader and relevent packages
