@@ -142,7 +142,7 @@ echo && echo "New user created. Type any key to continue."; read empty
 # install packages
 echo "${green}-- Installing utility packages.${reset}"
 pacman -Sy
-pacman -S --noconfirm xorg xorg-xinit xwallpaper scrot python-pywal firefox firefox-developer-edition git neovim \
+pacman -S --noconfirm xorg xorg-xinit xwallpaper scrot python-pywal firefox firefox-developer-edition github-cli neovim \
 	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop pulseaudio pulseaudio-alsa pulseaudio-bluetooth networkmanager \
 	pulseaudio-jack mesa xf86-video-intel vulkan-intel bluez bluez-utils bluez-tools pulseaudio-bluetooth powertop libinput \
 	picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf libnotify dunst alacritty highlight wmctrl deepin-gtk-theme
@@ -192,18 +192,6 @@ green=`tput setaf 2`
 yellow=`tput setaf 3`
 reset=`tput sgr0`
 
-# create folders
-cd $HOME
-echo "${green}-- Create folders.${reset}"
-mkdir -p ~/Documents ~/Developments ~/Pictures/Wallpapers ~/Videos
-ls -la
-echo && echo "Folders created. Type any key to continue."; read empty
-
-# download wallpaper
-echo "${green}-- Download wallpaper.${reset}"
-curl -o ~/Pictures/Wallpapers/Green-leaves.jpeg https://images.pexels.com/photos/1072179/pexels-photo-1072179.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
-echo && echo "Wallpaper downloaded. Type any key to continue."; read empty
-
 # install dotfiles
 cd $HOME
 echo "${green}-- Install dotfiles.${reset}"
@@ -244,6 +232,18 @@ echo && echo "Vimplug installed. Type any key to continue."; read empty
 echo "${green}-- Install ranger icons.${reset}"
 git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons
 echo && echo "Ranger icons installed. Type any key to continue."; read empty
+
+# download wallpaper
+echo "${green}-- Download wallpaper.${reset}"
+curl -o ~/Pictures/Wallpapers/Green-leaves.jpeg https://images.pexels.com/photos/1072179/pexels-photo-1072179.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
+echo && echo "Wallpaper downloaded. Type any key to continue."; read empty
+
+# create folders
+cd $HOME
+echo "${green}-- Create folders.${reset}"
+mkdir -p ~/Documents ~/Developments ~/Pictures/Wallpapers ~/Videos
+ls -la
+echo && echo "Folders created. Type any key to continue."; read empty
 
 # remove unwated files
 echo "${green}-- Cleaning and linking.${reset}"
