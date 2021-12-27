@@ -44,7 +44,7 @@ echo && echo "Partitioning completed.  Press any key to continue..."; read empty
 
 # install linux system and essentials.
 echo "${green}-- Installing linux system and essentials.${reset}"
-pacstrap /mnt base linux linux-headers linux-firmware base-devel archlinux-keyring
+pacstrap /mnt base linux linux-headers linux-firmware base-devel archlinux-keyring git openssh networkmanager bluez bluez-utils grub os-prober ntfs-3g efibootmgr
 
 # generate fstab
 echo "${green}-- Generating fstab.${reset}"
@@ -101,7 +101,6 @@ passwd
 
 # install services and enable services
 echo "${green}-- Installing services.${reset}"
-pacman --noconfirm -S git openssh networkmanager bluez bluez-utils
 systemctl start NetworkManager.service
 systemctl enable NetworkManager.service
 systemctl start bluetooth.service
@@ -116,7 +115,6 @@ echo && echo "Sudoers file updated. Type any key to continue."; read empty
 
 # install grub bootloader and relevent packages
 echo "${green}-- Installing grub bootloader and relevent packages.${reset}"
-pacman --noconfirm -S grub os-prober ntfs-3g efibootmgr
 grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
 
 # choosing dual boot or single boot
@@ -144,7 +142,7 @@ echo && echo "New user created. Type any key to continue."; read empty
 # install packages
 echo "${green}-- Installing utility packages.${reset}"
 pacman -Sy
-pacman -S --noconfirm xorg xorg-xinit xwallpaper git
+pacman -S --noconfirm xorg xorg-xinit xwallpaper zsh
 echo && echo "Utility packages installed. Type any key to continue."; read empty
 
 # install window manager
