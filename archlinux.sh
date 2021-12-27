@@ -121,7 +121,7 @@ grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
 read -p "${yellow}Do you wish to dualboot? [y/n]${reset}" answer
 if [[ $answer = y ]] ; then
      # enable os-prober
-     echo -e "\n# Enable os-prober\nGRUB_DISABLE_OS_PROBER=false" >> /mnt/etc/default/grub
+     echo -e "\n# Disable os-prober\nGRUB_DISABLE_OS_PROBER=false" >> /etc/default/grub
      
      # mount windows efi
      mkdir /boot/winefi
