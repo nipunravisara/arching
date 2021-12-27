@@ -161,56 +161,56 @@ done
 echo && echo "Window manager installed. Type any key to continue."; read empty
 
 # set stage three installer
-#stage_three_path=/home/$USERNAME/ricing.sh
-#sed '1,/^#ricing$/d' arch.sh > $stage_three_path
-#chown $USERNAME:$USERNAME $stage_three_path
-#chmod +x $stage_three_path
-#ls -la
-#echo && echo "Script is ready. Type any key to continue."; read empty
-#su -c $stage_three_path -s /bin/bash $USERNAME
-#exit
+ricing_path=/home/$USERNAME/ricing.sh
+sed '1,/^#ricing$/d' arch.sh > $ricing_path
+chown $USERNAME:$USERNAME $ricing_path
+chmod +x $ricing_path
+ls -la
+echo && echo "Script is ready. Type any key to continue."; read empty
+su -c $ricing_path -s /bin/sh $USERNAME
+exit
 
 #ricing
 
 # create folders
 echo "${green}-- Creating folders.${reset}"
-arch-chroot /mnt su "$USERNAME" -c mkdir -p ~/Documents ~/Developments ~/Pictures/Wallpapers ~/Videos
+mkdir -p ~/Documents ~/Developments ~/Pictures/Wallpapers ~/Videos
 echo && echo "Folders created. Type any key to continue."; read empty
 
 # download wallpaper
 echo "${green}-- Downloading wallpaper.${reset}"
-arch-chroot /mnt su "$USERNAME" curl -o ~/Pictures/Wallpapers/Green-leaves.jpeg https://images.pexels.com/photos/1072179/pexels-photo-1072179.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
+curl -o ~/Pictures/Wallpapers/Green-leaves.jpeg https://images.pexels.com/photos/1072179/pexels-photo-1072179.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
 echo && echo "Wallpaper downloaded. Type any key to continue."; read empty
 
 # install dotfiles
 cd $HOME
 echo "${green}-- Installing dotfiles.${reset}"
-arch-chroot /mnt su "$USERNAME" git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dotfiles
-arch-chroot /mnt su "$USERNAME" echo ".dotfiles" >> .gitignore
-arch-chroot /mnt su "$USERNAME" alias dots='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-arch-chroot /mnt su "$USERNAME" dots config --local status.showUntrackedFiles no
-arch-chroot /mnt su "$USERNAME" dots checkout
+git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dotfiles
+echo ".dotfiles" >> .gitignore
+alias dots='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+dots config --local status.showUntrackedFiles no
+dots checkout
 
 # install oh-my-zsh and chnaging shell to zsh
 echo "${green}-- Changing shell to zsh.${reset}"
-arch-chroot /mnt su "$USERNAME" sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 # install oh-my-zsh extentions
 echo "${green}-- Install oh-my-zsh extentions.${reset}"
-arch-chroot /mnt su "$USERNAME" clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-arch-chroot /mnt su "$USERNAME" clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
 # install ranger icons
 echo "${green}-- Install ranger icons.${reset}"
-arch-chroot /mnt su "$USERNAME" clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons
+clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons
 
 # remove unwated files
 echo "${green}-- Cleaning and linking.${reset}"
-arch-chroot /mnt su "$USERNAME" rm -rf ~/.zshrc ~/.zsh_history ~/.bash_logout ~/.bash_profile ~/.bashrc ~/.shell.pre-oh-my-zsh ~/.zcompdump*
-arch-chroot /mnt su "$USERNAME" ln -s ~/.config/x11/xinitrc .xinitrc
-arch-chroot /mnt su "$USERNAME" ln -s ~/.config/x11/Xresources .Xresources
-arch-chroot /mnt su "$USERNAME" ln -s ~/.config/zsh/zprofile .zprofile
-arch-chroot /mnt su "$USERNAME" ln -s ~/.config/zsh/zshrc .zshrc
+rm -rf ~/.zshrc ~/.zsh_history ~/.bash_logout ~/.bash_profile ~/.bashrc ~/.shell.pre-oh-my-zsh ~/.zcompdump*
+ln -s ~/.config/x11/xinitrc .xinitrc
+ln -s ~/.config/x11/Xresources .Xresources
+ln -s ~/.config/zsh/zprofile .zprofile
+ln -s ~/.config/zsh/zshrc .zshrc
 
 echo "${green}-- Installation Completed, Restart to use your system. --${reset}"
 exit
