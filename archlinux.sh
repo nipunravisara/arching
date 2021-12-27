@@ -6,16 +6,17 @@ green=`tput setaf 2`
 yellow=`tput setaf 3`
 reset=`tput sgr0`
 
+DEVICE=/dev/sda
+HOSTNAME="rbthl"
+
+WIN_DEVICE="${DEVICE}1"
+BOOT_DEVICE="${DEVICE}2"
+ROOT_DEVICE="${DEVICE}3"
+
+TIME_ZONE="Asia/Colombo"
+LOCALE="en_US.UTF-8"
+
 echo "${green}Starting arch installation...${reset}"
-
-# setup keyboard layout
-echo "${green}-- Setting up keyboard layout.${reset}"
-loadkeys us
-
-# sort mirror list
-echo "${green}-- Pick best mirrors.${reset}"
-reflector --latest 20 --sort rate --save /etc/pacman.d/mirrorlist --protocol https --download-timeout 5
-sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 
 # set system clock
 echo "${green}-- Set system clock.${reset}"
@@ -26,29 +27,29 @@ echo "${green}-- Formatting partitions.${reset}"
 lsblk
 
 # format efi partition.
-echo "${yellow}Enter linux EFI partition: ${reset}"
-read linuxefipartition
-mkfs.fat -F32 $linuxefipartition
+echo "${green}-- Formatting boot partitions.${reset}"
+mkfs.fat -F32 "$BOOT_DEVICE"
 
 # format root partition.
-echo "${yellow}Enter root partition: ${reset}"
-read rootpartition
-mkfs.ext4 $rootpartition
+echo "${green}-- Formatting root partitions.${reset}"
+mkfs.ext4 "$ROOT_DEVICE"
 
 # mounting partitons
 echo "${green}-- Mounting partitons.${reset}"
-mount $rootpartition /mnt
+mount "$ROOT_DEVICE" /mnt
 mkdir /mnt/boot
-mount $linuxefipartition /mnt/boot
+mount "$BOOT_DEVICE" /mnt/boot
 df
+echo && echo "Partitioning completed.  Press any key to continue..."; read empty
 
 # install linux system and essentials.
-echo "${green}-- Install linux system and essentials.${reset}"
-pacstrap /mnt base linux linux-firmware net-tools networkmanager openssh vi base-devel neovim curl git
+echo "${green}-- Installing linux system and essentials.${reset}"
+pacstrap /mnt base linux linux-headers linux-firmware base-devel archlinux-keyring
 
 # generate fstab
-echo "${green}-- Generate fstab.${reset}"
+echo "${green}-- Generating fstab.${reset}"
 genfstab -U /mnt >> /mnt/etc/fstab
+echo && echo "Base system ready. Press any key to continue..."; read empty
 
 # set stage two installer
 sed '1,/^#stage-two$/d' archlinux.sh > /mnt/stage-two.sh
@@ -67,69 +68,89 @@ green=`tput setaf 2`
 yellow=`tput setaf 3`
 reset=`tput sgr0`
 
-# set system language
-echo "${green}-- Set system language.${reset}"
-sed '/en_US.UTF-8 UTF-8/s/^#//' -i /etc/locale.gen
-locale-gen
-echo 'LANG=en_US.UTF-8' >> /etc/locale.conf
-
-# set local time zone
-echo "${green}-- Set time zone.${reset}"
-ln -sf /usr/share/zoneinfo/Asia/Colombo /etc/localtime
-
-# update hardware clock
-echo "${green}-- Update hardware clock.${reset}"
+# set time zone
+echo "${green}-- Setting system language.${reset}"
+ln -sf /usr/share/zoneinfo/"$TIME_ZONE" /etc/localtime
 hwclock --systohc --utc
+date
+echo && echo "Time zone updated. Press any key to continue..."; read empty
+
+# set system locale
+echo "${green}-- Setting system locale.${reset}"
+sed -i "s/#$LOCALE/$LOCALE/g" /etc/locale.gen
+locale-gen
+echo "LANG=$LOCALE" > /etc/locale.conf
+export LANG="$LOCALE"
+echo && echo "System locale updated. Type any key to continue."; read empty
 
 # crate hostname
-echo "${green}-- Set system hostname.${reset}"
-echo "${yellow}Pick a hostname: ${reset}"
-read hostname
-echo $hostname >> /etc/hostname
+echo "${green}-- Setting system hostname($HOSTNAME).${reset}"
+echo "$HOSTNAME" > /etc/hostname
+echo && echo "Hostname($HOSTNAME) updated. Type any key to continue."; read empty
 
-# set hosts
-echo "${green}-- Setup system hostfile.${reset}"
-echo -e "\n127.0.0.1    localhost\n::1          localhost\n127.0.0.1    desktop.localdomain $hostname" >> /etc/hosts
+# crate hosts
+echo "${green}-- Setting system hosts file.${reset}"
+cat > /etc/hosts <<HOSTS
+127.0.0.1      localhost
+::1            localhost
+127.0.1.1      $HOSTNAME.localdomain     $HOSTNAME
+HOSTS
+echo && echo "System hosts file updated. Type any key to continue."; read empty
 
-# install bootloader and relevent packages
-echo "${green}-- Install bootloader and relevent packages.${reset}"
+# set root password
+echo "${green}-- Setting root user password.${reset}"
+passwd
+
+# install services and enable services
+echo "${green}-- Installing services.${reset}"
+pacman --noconfirm -S git openssh networkmanager bluez bluez-utils
+systemctl start NetworkManager.service
+systemctl enable NetworkManager.service
+systemctl start bluetooth.service
+systemctl enable bluetooth.service
+echo && echo "Services installed and enabled. Type any key to continue."; read empty
+
+# setting up sudoers file.
+echo "${green}-- Setting up sudoers file.${reset}"
+sed -i '/# %wheel ALL=(ALL) ALL/c\%wheel ALL=(ALL) ALL' /etc/sudoers
+cat /etc/sudoers
+echo && echo "Sudoers file updated. Type any key to continue."; read empty
+
+# install grub bootloader and relevent packages
+echo "${green}-- Installing grub bootloader and relevent packages.${reset}"
 pacman --noconfirm -S grub os-prober ntfs-3g efibootmgr
-
-# install grub on system
 grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
 
 # choosing dual boot or single boot
 read -p "${yellow}Do you wish to dualboot? [y/n]${reset}" answer
 if [[ $answer = y ]] ; then
-     
      # enable os-prober
-     echo -e "\n# Enable os-prober\nGRUB_DISABLE_OS_PROBER=false" >> /etc/default/grub
-
-     # mounting windows efi
-     echo "${green}-- Mounting windows EFI.${reset}"
-     mkdir /boot/winefi
-
-     lsblk
+     echo -e "\n# Enable os-prober\nGRUB_DISABLE_OS_PROBER=false" >> /mnt/etc/default/grub
      
-     echo "${yellow}Enter windows EFI partition: ${reset}"
-     read winefipartition
-     mount $winefipartition /boot/winefi
+     # mount windows efi
+     mkdir /boot/winefi
+     mount "$WIN_DEVICE" /boot/winefi
 fi
 
 # generate grub conf
 grub-mkconfig -o /boot/grub/grub.cfg
+echo && echo "Bootloader installed. Type any key to continue."; read empty
 
-# setting up sudoers file.
-echo "${green}-- Setting up sudoers file.${reset}"
-echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
+# creating new user.
+echo "${green}-- Creating new user.${reset}"
+echo "${yellow}Enter Username: ${reset}"; read USERNAME
+useradd -m -G wheel,power,storage,audio,video,optical -s /bin/bash "$USERNAME"
+passwd "$USERNAME"
+echo && echo "New user created. Type any key to continue."; read empty
 
 # install packages
-echo "${green}-- Install package${reset}"
+echo "${green}-- Installing utility packages.${reset}"
 pacman -Sy
-pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop xwallpaper scrot python-pywal \
+pacman -S --noconfirm xorg xorg-xinit xwallpaper scrot python-pywal firefox firefox-developer-edition git \
 	xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop pulseaudio pulseaudio-alsa pulseaudio-bluetooth networkmanager \
 	pulseaudio-jack mesa xf86-video-intel vulkan-intel bluez bluez-utils bluez-tools pulseaudio-bluetooth powertop libinput \
-	picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf firefox firefox-developer-edition libnotify dunst alacritty highlight wmctrl deepin-gtk-theme
+	picom sxhkd pamixer ranger sxiv mpv zathura zathura-pdf-mupdf libnotify dunst alacritty highlight wmctrl deepin-gtk-theme
+echo && echo "Utility packages installed. Type any key to continue."; read empty
 
 # install window manager
 echo "${green}-- Select a window manager to install.${reset}"
@@ -154,33 +175,14 @@ do
         *) echo "${yellow}invalid option $REPLY, Try again.${reset}";;
     esac
 done
-
-# starting networkmanager.
-echo "${green}-- Starting network manager${reset}"
-systemctl enable NetworkManager.service 
-
-# starting bluetooth.
-echo "${green}-- Starting bluetooth${reset}"
-sudo systemctl enable bluetooth.service
-sed '250iAutoEnable=true' /etc/bluetooth/main.conf
-
-# set root password
-echo "${green}-- Set root user password.${reset}"
-passwd
-
-# creating new user.
-echo "${green}-- Creating new user.${reset}"
-echo "${yellow}Enter Username: ${reset}"
-read username
-useradd -m -G wheel,power,storage,audio,video,optical -s /bin/sh $username
-passwd $username
+echo && echo "Window manager installed. Type any key to continue."; read empty
 
 # set stage three installer
-stage_three_path=/home/$username/stage-three.sh
+stage_three_path=/home/"$USERNAME"/stage-three.sh
 sed '1,/^#stage-three$/d' stage-two.sh > $stage_three_path
-chown $username:$username $stage_three_path
+chown "$USERNAME":"$USERNAME" $stage_three_path
 chmod +x $stage_three_path
-su -c $stage_three_path -s /bin/sh $username
+su -c $stage_three_path -s /bin/bash "$USERNAME"
 exit
 
 #stage-three
@@ -231,12 +233,4 @@ ln -s ~/.config/zsh/zprofile .zprofile
 ln -s ~/.config/zsh/zshrc .zshrc
 
 echo "${green}-- Installation Completed, Restart to use your system. --${reset}"
-
-# restart
-read -p "${yellow}Restart now? [y/n]${reset}" answer
-if [[ $answer = y ]] ; then
-     # unmount and restart
-     umount -f /mnt
-     reboot
-fi
 exit
