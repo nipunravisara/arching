@@ -44,7 +44,7 @@ echo && echo "Partitioning completed.  Press any key to continue..."; read empty
 
 # install linux system and essentials.
 echo "${green}-- Installing linux system and essentials.${reset}"
-pacstrap /mnt base linux linux-headers linux-firmware base-devel archlinux-keyring git openssh networkmanager bluez bluez-utils grub os-prober ntfs-3g efibootmgr
+pacstrap /mnt base linux linux-headers linux-firmware base-devel archlinux-keyring git openssh networkmanager bluez bluez-utils grub os-prober ntfs-3g efibootmgr zsh
 
 # generate fstab
 echo "${green}-- Generating fstab.${reset}"
@@ -135,14 +135,13 @@ echo && echo "Bootloader installed. Type any key to continue."; read empty
 # creating new user.
 echo "${green}-- Creating new user.${reset}"
 echo "${yellow}Enter Username: ${reset}"; read USERNAME
-useradd -m -G wheel,power,storage,audio,video,optical -s /bin/bash "$USERNAME"
+useradd -m -G wheel,power,storage,audio,video,optical -s /bin/sh "$USERNAME"
 passwd "$USERNAME"
 echo && echo "New user created. Type any key to continue."; read empty
 
 # install packages
 echo "${green}-- Installing utility packages.${reset}"
 pacman -Sy
-pacman -S --noconfirm xorg xorg-xinit xwallpaper zsh
 echo && echo "Utility packages installed. Type any key to continue."; read empty
 
 # install window manager
@@ -178,7 +177,7 @@ chmod +x $stage_three_path
 ls
 ls /home/"$USERNAME" -la
 echo && echo "Script ready. Type any key to continue."; read empty
-su -c $stage_three_path -s /bin/bash "$USERNAME"
+su -c $stage_three_path -s /bin/sh "$USERNAME"
 exit
 
 #stage-three
@@ -194,23 +193,24 @@ cd $HOME
 echo "${green}-- Create folders.${reset}"
 mkdir -p ~/Documents ~/Developments ~/Pictures/Wallpapers ~/Videos
 ls -la
-ls /home/"$USERNAME" -la
 echo && echo "Folders created. Type any key to continue."; read empty
 
 # download wallpaper
 echo "${green}-- Download wallpaper.${reset}"
 curl -o ~/Pictures/Wallpapers/Green-leaves.jpeg https://images.pexels.com/photos/1072179/pexels-photo-1072179.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
+ls ~Pictures/Wallpapers -la
 echo && echo "Wallpaper downloaded. Type any key to continue."; read empty
 
 # install dotfiles
 cd $HOME
 echo "${green}-- Install dotfiles.${reset}"
 git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dotfiles
+ls -la
 echo && echo "Type any key to continue."; read empty
 echo ".dotfiles" >> .gitignore
-echo && echo "ignore Type any key to continue."; read empty
+echo && echo "Gitignore added. Type any key to continue."; read empty
 alias dots='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-echo && echo "alias Type any key to continue."; read empty
+echo && echo "Alias added. Type any key to continue."; read empty
 dots config --local status.showUntrackedFiles no
 dots checkout
 echo && echo "Type any key to continue."; read empty
@@ -240,5 +240,7 @@ ln -s ~/.config/zsh/zprofile .zprofile
 ln -s ~/.config/zsh/zshrc .zshrc
 echo && echo "Type any key to continue."; read empty
 
+
 echo "${green}-- Installation Completed, Restart to use your system. --${reset}"
+chsh -s $(which zsh)
 exit
