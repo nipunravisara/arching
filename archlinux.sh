@@ -193,8 +193,7 @@ yellow=`tput setaf 3`
 reset=`tput sgr0`
 
 # install dotfiles
-cd $HOME
-echo "${green}-- Install dotfiles.${reset}"
+echo "${green}-- Installing dotfiles.${reset}"
 git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dotfiles
 ls -la
 echo && echo "Dotfiles cloned. Type any key to continue."; read empty
@@ -233,17 +232,17 @@ echo "${green}-- Install ranger icons.${reset}"
 git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons
 echo && echo "Ranger icons installed. Type any key to continue."; read empty
 
-# download wallpaper
-echo "${green}-- Download wallpaper.${reset}"
-curl -o ~/Pictures/Wallpapers/Green-leaves.jpeg https://images.pexels.com/photos/1072179/pexels-photo-1072179.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
-echo && echo "Wallpaper downloaded. Type any key to continue."; read empty
-
 # create folders
 cd $HOME
 echo "${green}-- Create folders.${reset}"
 mkdir -p ~/Documents ~/Developments ~/Pictures/Wallpapers ~/Videos
 ls -la
 echo && echo "Folders created. Type any key to continue."; read empty
+
+# download wallpaper
+echo "${green}-- Download wallpaper.${reset}"
+curl -o ~/Pictures/Wallpapers/Green-leaves.jpeg https://images.pexels.com/photos/1072179/pexels-photo-1072179.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
+echo && echo "Wallpaper downloaded. Type any key to continue."; read empty
 
 # remove unwated files
 echo "${green}-- Cleaning and linking.${reset}"
