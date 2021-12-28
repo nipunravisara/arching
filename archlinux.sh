@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
 # colors
+reset=`tput sgr0`
 red=`tput setaf 1`
 green=`tput setaf 2`
 yellow=`tput setaf 3`
-reset=`tput sgr0`
+magenta=`tput setaf 5`
 
 DEVICE=/dev/sda
 HOSTNAME="rbthl"
@@ -63,10 +64,11 @@ exit
 #stage-two
 
 # colors
+reset=`tput sgr0`
 red=`tput setaf 1`
 green=`tput setaf 2`
 yellow=`tput setaf 3`
-reset=`tput sgr0`
+magenta=`tput setaf 5`
 
 # set time zone
 echo "${green}-- Setting system language.${reset}"
@@ -187,10 +189,11 @@ exit
 #stage-three
 
 # colors
+reset=`tput sgr0`
 red=`tput setaf 1`
 green=`tput setaf 2`
 yellow=`tput setaf 3`
-reset=`tput sgr0`
+magenta=`tput setaf 5`
 
 # install dotfiles
 echo "${green}-- Installing dotfiles.${reset}"
