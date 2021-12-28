@@ -104,10 +104,9 @@ passwd
 
 # install services and enable services
 echo "${green}-- Installing services.${reset}"
-systemctl start NetworkManager.service
 systemctl enable NetworkManager.service
-systemctl start bluetooth.service
 systemctl enable bluetooth.service
+sed -i '/#AutoEnable=false/c\AutoEnable=true' /etc/bluetooth/main.conf
 echo && echo "Services are installed and enabled. Type any key to continue."; read empty
 
 # setting up sudoers file.
