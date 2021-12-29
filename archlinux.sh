@@ -146,7 +146,7 @@ echo "${green}-- Installing utility packages.${reset}"
 pacman -Sy
 pacman -S --noconfirm xorg xorg-xinit xwallpaper scrot python-pywal firefox chromium github-cli neovim alacritty \
 	zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug htop pulseaudio pulseaudio-alsa pulseaudio-bluetooth \
-	pulseaudio-jack mesa xf86-video-intel vulkan-intel powertop libinput zathura zathura-pdf-mupdf \
+	pulseaudio-jack mesa xf86-video-intel vulkan-intel powertop libinput zathura zathura-pdf-mupdf papirus-icon-theme \
 	picom sxhkd pamixer ranger sxiv mpv libnotify dunst highlight wmctrl deepin-gtk-theme
 echo && echo "Utility packages are installed. Type any key to continue."; read empty
 
