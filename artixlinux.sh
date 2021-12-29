@@ -7,7 +7,7 @@ green=`tput setaf 2`
 yellow=`tput setaf 3`
 magenta=`tput setaf 5`
 
-DEVICE=/dev/nvme0n
+DEVICE=/dev/nvme0n1
 HOSTNAME="rbthl"
 
 WIN_DEVICE="${DEVICE}p1"
@@ -61,9 +61,9 @@ fstabgen -U /mnt >> /mnt/etc/fstab
 echo && echo "Base system is ready. Press any key to continue..."; read empty
 
 # set stage two installer
-sed '1,/^#stage-two$/d' archlinux.sh > /mnt/stage-two.sh
+sed '1,/^#stage-two$/d' artixlinux.sh > /mnt/stage-two.sh
 chmod +x /mnt/stage-two.sh
-arch-chroot /mnt ./stage-two.sh
+artix-chroot /mnt ./stage-two.sh
 exit
 
 #stage-two
@@ -210,7 +210,7 @@ git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dotfiles
 ls -la
 echo && echo "Dotfiles are cloned. Type any key to continue."; read empty
 
-echo ".dotfiles" >> .gitignore
+echo ".dotfiles" >> $HOME/.gitignore
 ls -la
 echo && echo "Gitignore is added. Type any key to continue."; read empty
 
@@ -259,7 +259,7 @@ echo && echo "Wallpaper is downloaded. Type any key to continue."; read empty
 # remove unwated files
 echo "${green}-- Cleaning and linking.${reset}"
 ls -la
-rm -rf ~/.zshrc ~/.zsh_history ~/.bash_logout ~/.bash_profile ~/.bashrc ~/.shell.pre-oh-my-zsh ~/.zcompdump*
+rm -rf ~/.zshrc ~/.zsh_history ~/.bash_logout ~/.bash_profile ~/.bashrc ~/.shell.pre-oh-my-zsh ~/.zcompdump* ~/.zshrc.pre-oh-my-zsh
 ls -la
 echo && echo "Home dir is cleanned. Type any key to continue."; read empty
 
