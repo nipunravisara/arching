@@ -158,7 +158,7 @@ pacman -Sy
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop xwallpaper nodejs yarn \
 	scrot python-pywal xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug pulseaudio pulseaudio-alsa pulseaudio-bluetooth \
 	pulseaudio-jack pulseaudio-bluetooth mesa xf86-video-intel vulkan-intel powertop libinput picom sxhkd pamixer ranger code \
-	chromium firefox neovim htop alacritty mpv sxiv zathura zathura-pdf-mupdf libnotify dunst  highlight wmctrl deepin-gtk-theme
+	chromium firefox neovim htop alacritty mpv sxiv zathura zathura-pdf-mupdf libnotify dunst  highlight wmctrl deepin-gtk-theme papirus-icon-theme
 echo && echo "Utility packages are installed. Type any key to continue."; read empty
 
 # install window manager
