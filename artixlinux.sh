@@ -8,14 +8,10 @@ yellow=`tput setaf 3`
 magenta=`tput setaf 5`
 
 DEVICE=/dev/nvme0n1
-HOSTNAME="rbthl"
 
 WIN_DEVICE="${DEVICE}p1"
 BOOT_DEVICE="${DEVICE}p4"
 ROOT_DEVICE="${DEVICE}p5"
-
-TIME_ZONE="Asia/Colombo"
-LOCALE="en_US.UTF-8"
 
 echo "${magenta}Starting arch installation...${reset}"
 
@@ -53,7 +49,7 @@ echo && echo "Partitioning is completed.  Press any key to continue..."; read em
 
 # install linux system and essentials.
 echo "${green}-- Installing linux system and essentials.${reset}"
-basestrap /mnt base linux runit elogind-runit artix-archlinux-support linux-headers linux-firmware base-devel archlinux-keyring git openssh networkmanager networkmanager-runit bluez bluez-utils bluez-tools bluez-runit grub os-prober ntfs-3g efibootmgr zsh
+basestrap /mnt base linux-lts runit elogind-runit artix-archlinux-support linux-headers linux-firmware base-devel archlinux-keyring git openssh networkmanager networkmanager-runit bluez bluez-utils bluez-tools bluez-runit grub os-prober ntfs-3g efibootmgr zsh
 
 # generate fstab
 echo "${green}-- Generating fstab.${reset}"
@@ -74,6 +70,11 @@ red=`tput setaf 1`
 green=`tput setaf 2`
 yellow=`tput setaf 3`
 magenta=`tput setaf 5`
+
+HOSTNAME="rbthl"
+
+TIME_ZONE="Asia/Colombo"
+LOCALE="en_US.UTF-8"
 
 # set time zone
 echo "${green}-- Setting system language.${reset}"
