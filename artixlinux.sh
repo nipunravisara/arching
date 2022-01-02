@@ -145,6 +145,19 @@ echo "${green}-- Creating new user.${reset}"
 echo "${yellow}Enter Username: ${reset}"; read USERNAME
 useradd -m -G wheel,power,storage,audio,video,optical -s /bin/sh "$USERNAME"
 passwd "$USERNAME"
+echo && echo "User created. Type any key to continue."; read empty
+
+# install yay
+echo "${green}-- Installing yay.${reset}"
+git clone https://aur.archlinux.org/yay-git.git /opt
+ls /opt
+echo && echo "Yay cloned. Type any key to continue."; read empty
+chown -R $USERNAME:$USERNAME /opt/yay-git
+echo && echo "Permission set. Type any key to continue."; read empty
+ls /opt/yay-git/
+makepkg -si /opt/yay-git/
+yay -Syy
+echo && echo "Yay installed. Type any key to continue."; read empty
 
 # enable arch repos
 echo "${green}-- Enabling arch repos.${reset}"
