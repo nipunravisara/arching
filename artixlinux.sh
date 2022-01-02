@@ -49,7 +49,7 @@ echo && echo "Partitioning is completed.  Press any key to continue..."; read em
 
 # install linux system and essentials.
 echo "${green}-- Installing linux system and essentials.${reset}"
-basestrap /mnt base linux-lts runit elogind-runit artix-archlinux-support linux-headers linux-firmware base-devel archlinux-keyring git openssh networkmanager networkmanager-runit bluez bluez-runit bluez-utils bluez-tools grub os-prober ntfs-3g efibootmgr zsh
+basestrap /mnt base linux-lts runit elogind-runit artix-archlinux-support linux-headers linux-firmware base-devel archlinux-keyring git openssh networkmanager networkmanager-runit bluez bluez-runit bluez-utils grub os-prober ntfs-3g efibootmgr zsh
 
 # generate fstab
 echo "${green}-- Generating fstab.${reset}"
