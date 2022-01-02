@@ -155,7 +155,7 @@ echo && echo "Yay cloned. Type any key to continue."; read empty
 chown -R $USERNAME:$USERNAME /opt/yay-git
 echo && echo "Permission set. Type any key to continue."; read empty
 ls /opt/yay-git/
-makepkg -si /opt/yay-git/
+su - $USERNAME -c "makepkg -si /opt/yay-git/" 
 yay -Syy
 echo && echo "Yay installed. Type any key to continue."; read empty
 
