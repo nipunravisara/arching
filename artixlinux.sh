@@ -9,7 +9,6 @@ magenta=`tput setaf 5`
 
 DEVICE=/dev/nvme0n1
 
-WIN_DEVICE="${DEVICE}p1"
 BOOT_DEVICE="${DEVICE}p4"
 ROOT_DEVICE="${DEVICE}p5"
 
@@ -71,6 +70,7 @@ green=`tput setaf 2`
 yellow=`tput setaf 3`
 magenta=`tput setaf 5`
 
+WIN_DEVICE="${DEVICE}p1"
 HOSTNAME="rbthl"
 
 TIME_ZONE="Asia/Colombo"
