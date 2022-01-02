@@ -149,7 +149,7 @@ echo && echo "User created. Type any key to continue."; read empty
 
 # install yay
 echo "${green}-- Installing yay.${reset}"
-git clone https://aur.archlinux.org/yay-git.git /opt
+git clone https://aur.archlinux.org/yay-git.git /opt/yay-git
 ls /opt
 echo && echo "Yay cloned. Type any key to continue."; read empty
 chown -R $USERNAME:$USERNAME /opt/yay-git
