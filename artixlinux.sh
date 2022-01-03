@@ -269,7 +269,7 @@ echo && echo "Folders are created. Type any key to continue."; read empty
 
 # download wallpaper
 echo "${green}-- Download wallpaper.${reset}"
-curl -o ~/Pictures/Wallpapers/Green-leaves.jpeg https://images.pexels.com/photos/1072179/pexels-photo-1072179.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
+curl -o ~/Pictures/Wallpapers/Nissan-skyline.jpeg https://images.hdqwalls.com/wallpapers/nissan-gtr-r34-anime-girl-5k-dn.jpg
 echo && echo "Wallpaper is downloaded. Type any key to continue."; read empty
 
 # remove unwated files
