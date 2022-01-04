@@ -149,6 +149,15 @@ useradd -m -G wheel,power,storage,audio,video,optical -s /bin/sh "$USERNAME"
 passwd "$USERNAME"
 echo && echo "User created. Type any key to continue."; read empty
 
+# install yay
+echo "${green}-- Installing aur helper(yay).${reset}"
+git clone https://aur.archlinux.org/yay-git.git /opt/yay-git
+echo && echo "Aur cloned. Type any key to continue."; read empty
+chown -R "$USERNAME":"$USERNAME" /opt/yay-git
+echo && echo "Permission changed. Type any key to continue."; read empty
+cd /opt/yay-git/; makepkg -si
+echo && echo "Aur helper is installed. Type any key to continue."; read empty
+
 # enable arch repos
 echo "${green}-- Enabling arch repos.${reset}"
 pacman -Sy
