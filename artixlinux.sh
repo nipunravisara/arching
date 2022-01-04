@@ -272,7 +272,7 @@ echo && echo "Wallpaper is downloaded. Type any key to continue."; read empty
 # remove unwated files
 echo "${green}-- Cleaning and linking.${reset}"
 ls -la
-#rm -rf ~/.zshrc ~/.zsh_history ~/.bash_logout ~/.bash_profile ~/.bashrc ~/.shell.pre-oh-my-zsh ~/.zcompdump* ~/.zshrc.pre-oh-my-zsh
+rm -rf ~/.zsh_history ~/.bash_logout ~/.bash_profile ~/.bashrc ~/.shell.pre-oh-my-zsh ~/.zcompdump* ~/.zshrc.pre-oh-my-zsh
 ls -la
 echo && echo "Home dir is cleanned. Type any key to continue."; read empty
 
