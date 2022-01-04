@@ -113,7 +113,7 @@ echo && echo "Root user password is saved. Type any key to continue."; read empt
 # enable services
 echo "${green}-- Enabling services.${reset}"
 ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default/
-ln -s /etc/runit/sv/bluetoothd /run/runit/service
+ln -s /etc/runit/sv/bluetoothd /etc/runit/runsvdir/default/
 sed -i '/#AutoEnable=false/c\AutoEnable=true' /etc/bluetooth/main.conf
 echo && echo "Services are enabled. Type any key to continue."; read empty
 
@@ -183,11 +183,11 @@ do
             ;;
         "DWM")
             echo "${green}-- Installing $opt.${reset}"
-            git clone https://github.com/nipunravisara/dwm.git
-	    git clone https://github.com/nipunravisara/dwmblocks.git
-	    ls-la
-	    cd /dwm && sudo -S make clean install && ../
-	    cd /dwmblocks && sudo -S make clean install && ../
+            git clone https://github.com/nipunravisara/dwm.git /home/$USERNAME/dwm
+	    git clone https://github.com/nipunravisara/dwmblocks.git /home/$USERNAME/dwmblocks
+	    sudo -S make clean install -C /home/$USERNAME/dwm
+	    sudo -S make clean install -C /home/$USERNAME/dwmblocks
+	    echo && echo "DWM is installed. Type any key to continue."; read empty
             break
             ;;
         "Skip, Install manually")
@@ -272,7 +272,7 @@ echo && echo "Wallpaper is downloaded. Type any key to continue."; read empty
 # remove unwated files
 echo "${green}-- Cleaning and linking.${reset}"
 ls -la
-rm -rf ~/.zshrc ~/.zsh_history ~/.bash_logout ~/.bash_profile ~/.bashrc ~/.shell.pre-oh-my-zsh ~/.zcompdump* ~/.zshrc.pre-oh-my-zsh
+#rm -rf ~/.zshrc ~/.zsh_history ~/.bash_logout ~/.bash_profile ~/.bashrc ~/.shell.pre-oh-my-zsh ~/.zcompdump* ~/.zshrc.pre-oh-my-zsh
 ls -la
 echo && echo "Home dir is cleanned. Type any key to continue."; read empty
 
