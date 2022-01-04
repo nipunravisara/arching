@@ -70,7 +70,9 @@ green=`tput setaf 2`
 yellow=`tput setaf 3`
 magenta=`tput setaf 5`
 
+DEVICE=/dev/nvme0n1
 WIN_DEVICE="${DEVICE}p1"
+
 HOSTNAME="rbthl"
 
 TIME_ZONE="Asia/Colombo"
@@ -147,20 +149,6 @@ useradd -m -G wheel,power,storage,audio,video,optical -s /bin/sh "$USERNAME"
 passwd "$USERNAME"
 echo && echo "User created. Type any key to continue."; read empty
 
-# install yay
-echo "${green}-- Installing yay.${reset}"
-git clone https://aur.archlinux.org/yay-git.git /opt/yay-git
-ls /opt
-echo && echo "Yay cloned. Type any key to continue."; read empty
-chown -R $USERNAME:$USERNAME /opt/yay-git
-echo && echo "Permission set. Type any key to continue."; read empty
-cd /opt/yay-git/
-ls
-su - $USERNAME -c "makepkg -si" 
-cd ../../
-yay -Syy
-echo && echo "Yay installed. Type any key to continue."; read empty
-
 # enable arch repos
 echo "${green}-- Enabling arch repos.${reset}"
 pacman -Sy
@@ -179,7 +167,7 @@ echo && echo "Utility packages are installed. Type any key to continue."; read e
 
 # install window manager
 echo "${green}-- Select a window manager to install.${reset}"
-options=("Herbstluftwm" "BSPWM" "Skip, Install manually")
+options=("Herbstluftwm" "BSPWM" "DWM" "Skip, Install manually")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -191,6 +179,15 @@ do
         "BSPWM")
             echo "${green}-- Installing $opt.${reset}"
             pacman -S --noconfirm bspwm
+            break
+            ;;
+        "DWM")
+            echo "${green}-- Installing $opt.${reset}"
+            git clone https://github.com/nipunravisara/dwm.git
+	    git clone https://github.com/nipunravisara/dwmblocks.git
+	    ls-la
+	    cd /dwm && sudo -S make clean install && ../
+	    cd /dwmblocks && sudo -S make clean install && ../
             break
             ;;
         "Skip, Install manually")
