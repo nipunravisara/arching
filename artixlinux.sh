@@ -117,12 +117,6 @@ ln -s /etc/runit/sv/bluetoothd /etc/runit/runsvdir/default/
 sed -i '/#AutoEnable=false/c\AutoEnable=true' /etc/bluetooth/main.conf
 echo && echo "Services are enabled. Type any key to continue."; read empty
 
-# setting up sudoers file.
-echo "${green}-- Setting up sudoers file.${reset}"
-sed -i '/# %wheel ALL=(ALL) ALL/c\%wheel ALL=(ALL) ALL' /etc/sudoers
-cat /etc/sudoers
-echo && echo "Sudoers file is updated. Type any key to continue."; read empty
-
 # install grub bootloader and relevent packages
 echo "${green}-- Installing grub bootloader and relevent packages.${reset}"
 grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB
@@ -149,14 +143,27 @@ useradd -m -G wheel,power,storage,audio,video,optical -s /bin/sh "$USERNAME"
 passwd "$USERNAME"
 echo && echo "User created. Type any key to continue."; read empty
 
+# setting no passwd to sudoers file.
+echo "${green}-- Setting up sudoers file.${reset}"
+sed -i '/# %wheel ALL=(ALL) NOPASSWD: ALL/c\%wheel ALL=(ALL) NOPASSWD: ALL' /etc/sudoers
+cat /etc/sudoers
+echo && echo "Sudoers file is updated. Type any key to continue."; read empty
+
 # install yay
 echo "${green}-- Installing aur helper(yay).${reset}"
 git clone https://aur.archlinux.org/yay-git.git /opt/yay-git
 echo && echo "Aur cloned. Type any key to continue."; read empty
 chown -R "$USERNAME":"$USERNAME" /opt/yay-git
 echo && echo "Permission changed. Type any key to continue."; read empty
-cd /opt/yay-git/; makepkg -si
+cd /opt/yay-git/; su "$USERNAME" -c 'makepkg -si --syncdeps --install --needed --noconfirm'; cd /
 echo && echo "Aur helper is installed. Type any key to continue."; read empty
+
+# setting up sudoers file file.
+echo "${green}-- Setting up sudoers file.${reset}"
+sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/c\# %wheel ALL=(ALL) NOPASSWD: ALL' /etc/sudoers
+sed -i '/# %wheel ALL=(ALL) ALL/c\%wheel ALL=(ALL) ALL' /etc/sudoers
+cat /etc/sudoers
+echo && echo "Sudoers file is updated. Type any key to continue."; read empty
 
 # enable arch repos
 echo "${green}-- Enabling arch repos.${reset}"
@@ -165,13 +172,15 @@ echo -e "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n\n[community]\nIncl
 pacman-key --populate archlinux
 echo && echo "Arch repos acre configured. Type any key to continue."; read empty
 
-# install packages
+# install packages in official repos
 echo "${green}-- Installing utility packages.${reset}"
 pacman -Sy
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop xwallpaper nodejs yarn \
 	scrot python-pywal xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug pulseaudio pulseaudio-alsa pulseaudio-bluetooth \
-	pulseaudio-jack pulseaudio-bluetooth mesa xf86-video-intel vulkan-intel powertop libinput picom sxhkd pamixer ranger code \
+	pulseaudio-jack pulseaudio-bluetooth mesa xf86-video-intel vulkan-intel powertop libinput sxhkd pamixer ranger code \
 	chromium firefox neovim htop alacritty mpv sxiv zathura zathura-pdf-mupdf libnotify dunst  highlight wmctrl deepin-gtk-theme papirus-icon-theme
+yay -Sy
+pacman -S --noconfirm breezex-cursor-theme pfetch picom-git
 echo && echo "Utility packages are installed. Type any key to continue."; read empty
 
 # install window manager
