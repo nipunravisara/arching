@@ -174,7 +174,12 @@ echo && echo "Arch repos acre configured. Type any key to continue."; read empty
 
 # install packages in official repos
 echo "${green}-- Installing utility packages.${reset}"
-pacman -Sy
+su "$USERNAME" -c 'yay -Sy'
+echo && echo "Yay synced. Type any key to continue."; read empty
+pacman -Qqm
+echo && echo "Installed form yay. Type any key to continue."; read empty
+su "$USERNAME" -c 'yay -S libxft-bgra'
+echo && echo "Yay synced. Type any key to continue."; read empty
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop xwallpaper nodejs yarn \
 	scrot python-pywal xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug pulseaudio pulseaudio-alsa pulseaudio-bluetooth \
 	pulseaudio-jack pulseaudio-bluetooth mesa xf86-video-intel vulkan-intel powertop libinput sxhkd pamixer ranger code \
