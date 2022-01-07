@@ -172,7 +172,7 @@ echo && echo "Arch repos acre configured. Type any key to continue."; read empty
 # install packages in official repos
 echo "${green}-- Installing utility packages.${reset}"
 pacman -Sy
-pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop xwallpaper nodejs yarn \
+pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop xwallpaper nodejs yarn pulsemixer \
 	scrot python-pywal xclip zip unzip unrar p7zip zsh rsync rofi udisks2 ueberzug pulseaudio pulseaudio-alsa pulseaudio-bluetooth \
 	pulseaudio-jack pulseaudio-bluetooth mesa xf86-video-intel vulkan-intel powertop libinput sxhkd pamixer ranger code \
 	chromium firefox neovim htop alacritty mpv sxiv zathura zathura-pdf-mupdf libnotify dunst  highlight wmctrl deepin-gtk-theme papirus-icon-theme
@@ -245,12 +245,10 @@ echo && echo "Window manager is installed. Type any key to continue."; read empt
 
 # install dotfiles
 echo "${green}-- Installing dotfiles.${reset}"
-git clone --bare https://github.com/nipunravisara/dots.git $HOME/.dotfiles
-ls -la
+git clone --bare https://github.com/nipunravisara/dots.git ~/.dotfiles
 echo && echo "Dotfiles are cloned. Type any key to continue."; read empty
 
-echo ".dotfiles" >> $HOME/.gitignore
-ls -la
+echo ".dotfiles" >> ~/.gitignore
 echo && echo "Gitignore is added. Type any key to continue."; read empty
 
 alias dots='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
@@ -258,7 +256,6 @@ echo && echo "Alias is added. Type any key to continue."; read empty
 
 dots config --local status.showUntrackedFiles no
 dots checkout
-ls -la
 echo && echo "Dotfiles are applied. Type any key to continue."; read empty
 
 # install oh-my-zsh and chnaging shell to zsh
@@ -285,10 +282,9 @@ echo && echo "Ranger icons are installed. Type any key to continue."; read empty
 
 # remove unwated files
 echo "${green}-- Cleaning and linking.${reset}"
-ls -la
 rm -rf ~/.zsh_history ~/.bash_logout ~/.bash_profile ~/.bashrc ~/.shell.pre-oh-my-zsh ~/.zcompdump* ~/.zshrc.pre-oh-my-zsh
-ls -la
 echo && echo "Home dir is cleanned. Type any key to continue."; read empty
+ls -la
 
 echo "${magenta}-- Installation Completed, Restart to use your system. --${reset}"
 echo "Press any key to exit."; read empty
