@@ -34,10 +34,10 @@ mkfs.ext4 -L HOME "$HOME_DEVICE"
 
 # mounting partitons
 echo "${green}-- Mounting partitons.${reset}"
-mkdir /mnt/boot
-mkdir /mnt/home
 mount "$ROOT_DEVICE" /mnt
+mkdir /mnt/boot
 mount "$BOOT_DEVICE" /mnt/boot
+mkdir /mnt/home
 mount "$BOOT_DEVICE" /mnt/home
 df
 echo && echo "Partitioning is completed.  Press any key to continue..."; read empty
