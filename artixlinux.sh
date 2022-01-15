@@ -206,7 +206,7 @@ echo && echo "Folders are created. Type any key to continue."; read empty
 # download wallpaper
 echo "${green}-- Download wallpaper.${reset}"
 curl -o ~/Pictures/Wallpapers/Nissan-skyline.jpeg https://images.hdqwalls.com/wallpapers/nissan-gtr-r34-anime-girl-5k-dn.jpg
-wal -i  ~/Pictures/Wallpapers/Nissan-skyline.jpeg
+wal -q -i  ~/Pictures/Wallpapers/Nissan-skyline.jpeg
 echo && echo "Wallpaper is downloaded. Type any key to continue."; read empty
 
 # install window manager
@@ -228,9 +228,9 @@ do
         "DWM")
             echo "${green}-- Installing $opt.${reset}"
             git clone https://github.com/nipunravisara/dwm.git ~/dwm
-	    git clone https://github.com/nipunravisara/dwmblocks.git ~/dwmblocks
-	    sudo -S make clean install -C ~/dwm
-	    sudo -S make clean install -C ~/dwmblocks
+	        git clone https://github.com/nipunravisara/dwmblocks.git ~/dwmblocks
+	        sudo -S make clean install -C ~/dwm
+	        sudo -S make clean install -C ~/dwmblocks
 	    echo && echo "DWM is installed. Type any key to continue."; read empty
             break
             ;;
@@ -288,5 +288,5 @@ ls -la
 
 echo "${magenta}-- Installation Completed, Restart to use your system. --${reset}"
 echo "Press any key to exit."; read empty
-chsh -s $(which zsh)
+#chsh -s $(which zsh)
 exit
